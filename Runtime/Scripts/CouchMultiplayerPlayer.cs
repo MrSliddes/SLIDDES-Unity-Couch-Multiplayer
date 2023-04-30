@@ -42,9 +42,7 @@ namespace SLIDDES.Multiplayer.Couch
             {
                 playerInput.neverAutoSwitchControlSchemes = !CouchMultiplayerManager.Instance.singlePlayerInputSwitch;
             }
-            else playerInput.neverAutoSwitchControlSchemes = true;
-            // Set control scheme
-            playerInput.SwitchCurrentControlScheme(playerData.inputDevice);
+            else playerInput.neverAutoSwitchControlSchemes = true;        
         }
 
         /// <summary>

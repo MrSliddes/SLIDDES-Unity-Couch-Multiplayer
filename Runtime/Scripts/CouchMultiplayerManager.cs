@@ -132,7 +132,7 @@ namespace SLIDDES.Multiplayer.Couch
                 var inputActionAsset = Instantiate(joinAction.action.actionMap.asset);
                 var inputActionReference = InputActionReference.Create(inputActionAsset.FindAction(joinAction.action.name));
                 joinAction = new InputActionProperty(inputActionReference);
-                joinAction.action.performed += x => AddPlayer(joinAction.action.activeControl.device);
+                joinAction.action.performed += x => AddPlayer(x.control.device);
                 joinAction.action.Enable();
             }
         }

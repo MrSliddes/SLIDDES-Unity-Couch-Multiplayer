@@ -129,7 +129,9 @@ namespace SLIDDES.Multiplayer.Couch
                 return;
             }
             Transform spawn = GetPlayerSpawnTransform();
-            GameObject a = Instantiate(prefabPlayer, spawn.position, spawn.rotation);
+            //GameObject a = Instantiate(prefabPlayer, spawn.position, spawn.rotation);            
+            PlayerInput playerInput = PlayerInput.Instantiate(prefabPlayer, playerData.playerIndex, "", -1, pairWithDevice: playerData.inputDevice);
+            GameObject a = playerInput.gameObject;
             a.transform.SetParent(parentTransformPlayers);
 
             // Get / create cmp
