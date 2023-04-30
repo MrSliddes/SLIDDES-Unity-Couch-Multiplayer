@@ -183,7 +183,8 @@ namespace SLIDDES.Multiplayer.Couch
 
             // Get next iteraction of spawnPoint
             int i = playerSpawnPointIndex;
-            if(playerSpawnPointIndex < playerSpawnPositions.Length)
+            // Check if we can increase it for next iteration
+            if(playerSpawnPointIndex < playerSpawnPositions.Length - 1)
             {
                 playerSpawnPointIndex++;
             }
