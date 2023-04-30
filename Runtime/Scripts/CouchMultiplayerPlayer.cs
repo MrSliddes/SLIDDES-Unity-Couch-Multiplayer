@@ -14,8 +14,8 @@ namespace SLIDDES.Multiplayer.Couch
         public PlayerData playerData;
 
         [Header("Components")]
-        [Tooltip("The corresponding camera of the player. Can be left to null if the player doesnt have a camera")]
-        public new Camera camera;
+        [Tooltip("The corresponding cameras of the player. Can be left to null if the player doesnt have a camera. First index is used for Canvas overlay")]
+        public Camera[] cameras;
         [Tooltip("Reference to the player input script")]
         public PlayerInput playerInput;
 
@@ -56,8 +56,11 @@ namespace SLIDDES.Multiplayer.Couch
         /// </summary>
         public void RefreshCamera()
         {
-            camera.targetDisplay = playerData.cameraTargetDisplay;
-            camera.rect = playerData.cameraViewPortRect;
+            foreach(var camera in cameras)
+            {
+                camera.targetDisplay = playerData.cameraTargetDisplay;
+                camera.rect = playerData.cameraViewPortRect;
+            }
         }
     }
 }

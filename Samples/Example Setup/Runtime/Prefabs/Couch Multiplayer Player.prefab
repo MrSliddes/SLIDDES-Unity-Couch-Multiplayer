@@ -130,7 +130,8 @@ MonoBehaviour:
       y: -1
       width: -1
       height: -1
-  camera: {fileID: 7113882734307304470}
+  cameras:
+  - {fileID: 7113882734307304470}
   playerInput: {fileID: 1294342700711312168}
 --- !u!114 &1294342700711312168
 MonoBehaviour:
