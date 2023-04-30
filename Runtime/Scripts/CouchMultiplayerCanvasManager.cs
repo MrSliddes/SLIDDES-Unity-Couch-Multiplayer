@@ -3,14 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 namespace SLIDDES.Multiplayer.Couch
 {
+    [AddComponentMenu("SLIDDES/Multiplayer/Couch/Canvas Manager")]
+    [RequireComponent(typeof(EventSystem))]
+    [RequireComponent(typeof(InputSystemUIInputModule))]
     public class CouchMultiplayerCanvasManager : MonoBehaviour
     {
         public Components components;
 
+        /// <summary>
+        /// Action that gets triggerd when a player gets added
+        /// </summary>
         private UnityAction<GameObject> actionOnAddPlayer;
+        /// <summary>
+        /// List containing all the player canvases
+        /// </summary>
         private List<CouchMultiplayerPlayerCanvas> playerCanvases = new List<CouchMultiplayerPlayerCanvas>();
 
         private void OnEnable()
@@ -21,10 +33,10 @@ namespace SLIDDES.Multiplayer.Couch
             }
             if(components.parentCanvases == null) components.parentCanvases = transform;
 
-            actionOnAddPlayer = x => RefreshPlayerCanvases();
+            actionOnAddPlayer = x => GeneratePlayerCanvases();
             components.playerSpawner.events.onPlayerInstantiate.AddListener(actionOnAddPlayer);
 
-            RefreshPlayerCanvases();
+            GeneratePlayerCanvases();
         }
 
         private void OnDisable()
@@ -32,15 +44,13 @@ namespace SLIDDES.Multiplayer.Couch
             components.playerSpawner.events.onPlayerInstantiate.RemoveListener(actionOnAddPlayer);
         }
 
-
-        public void AddPlayerCanvas()
-        {
-
-        }
-
-        public void RefreshPlayerCanvases()
+        /// <summary>
+        /// Generate for each player the player canvas
+        /// </summary>
+        public void GeneratePlayerCanvases()
         {
             // Clear old canvases
+            playerCanvases.Clear();
             foreach(Transform child in components.parentCanvases.transform)
             {
                 Destroy(child.gameObject);
@@ -49,7 +59,10 @@ namespace SLIDDES.Multiplayer.Couch
             // Create a canvas for each player
             foreach(var item in components.playerSpawner.Players)
             {
-
+                GameObject a = Instantiate(components.prefabPlayerCanvas, components.parentCanvases);
+                CouchMultiplayerPlayerCanvas canvas = a.GetComponent<CouchMultiplayerPlayerCanvas>();
+                canvas.Initialize(item);
+                playerCanvases.Add(canvas);
             }
         }
 

@@ -28,6 +28,8 @@ namespace SLIDDES.Multiplayer.Couch
 
         [Tooltip("Show debug messages from this script")]
         public bool showDebug;
+        //[Tooltip("Spawn the max amount of players on start")] TODO
+        //public bool spawnMaxPlayers;
 
         [Header("Components")]
         [Tooltip("The prefab of the player to be spawned")]
@@ -101,7 +103,7 @@ namespace SLIDDES.Multiplayer.Couch
             players.Clear();
         }
 
-        public void DespawnPlayer(PlayerData playerData)
+        public void DespawnPlayer(PlayerData playerData) // TODO
         {
 
         }

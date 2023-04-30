@@ -5,34 +5,34 @@ using UnityEngine.Events;
 
 namespace SLIDDES.Multiplayer.Couch
 {
+    [AddComponentMenu("SLIDDES/Multiplayer/Couch/Player Canvas")]
     public class CouchMultiplayerPlayerCanvas : MonoBehaviour
     {
         public Components components;
         public Events events; 
 
-        // Start is called before the first frame update
-        void Start()
+        public void Initialize(CouchMultiplayerPlayer player)
         {
-        
-        }
+            components.player = player;
+            components.canvas.worldCamera = player.camera;
 
-        // Update is called once per frame
-        void Update()
-        {
-        
+            events.onInitialized.Invoke();
         }
 
         [System.Serializable]
         public class Components
         {
-            [Tooltip("The corresponding player gameobject of this canvas. Assigned by CouchMultiplayerCanvasManager")]
-            public GameObject player;
+            [Tooltip("The corresponding player component of this canvas. Assigned by CouchMultiplayerCanvasManager")]
+            public CouchMultiplayerPlayer player;
+            [Tooltip("The canvas belonging to this player")]
+            public Canvas canvas;
         }
 
         [System.Serializable]
         public class Events
         {
-            public UnityEvent onInitialize;
+            [Tooltip("Triggerd when the canvas is initialized")]
+            public UnityEvent onInitialized;
         }
     }
 }
