@@ -59,8 +59,9 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 1120369429361536294, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  maxPlayers: 8
+  maxPlayers: 1
   maxDisplays: 1
+  singlePlayerInputSwitch: 1
   showDebug: 1
   debugDeviceNameOnAdd: 0
   onAddPlayer:

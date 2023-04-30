@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 namespace SLIDDES.Multiplayer.Couch
 {
@@ -36,6 +37,13 @@ namespace SLIDDES.Multiplayer.Couch
                 Debug.LogError($"{debugPrefix} playerInput is not assigned. Please assign the component reference");
             }
 
+            // Set auto switch
+            if(CouchMultiplayerManager.Instance.maxPlayers == 1)
+            {
+                playerInput.neverAutoSwitchControlSchemes = !CouchMultiplayerManager.Instance.singlePlayerInputSwitch;
+            }
+            else playerInput.neverAutoSwitchControlSchemes = true;
+            // Set control scheme
             playerInput.SwitchCurrentControlScheme(playerData.inputDevice);
         }
 
@@ -72,7 +80,7 @@ namespace SLIDDES.Multiplayer.Couch
                     int[] availableLayers = config.cameraLayers.IncludedLayers();
                     layer = availableLayers[playerData.playerIndex];
                     config.camera.cullingMask &= ~(1 << layer); // turn off bit
-                                                                // Set overlay layer on
+                    // Set overlay layer on
                     if(config.cameraOverlayLayers.value != 0) config.camera.cullingMask |= 1 << overlayLayer; // turn on bit
                 }
 

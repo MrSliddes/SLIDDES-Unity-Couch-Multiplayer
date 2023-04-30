@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace SLIDDES.Multiplayer.Couch
 {
@@ -140,7 +141,7 @@ namespace SLIDDES.Multiplayer.Couch
                 if(showDebug) Debug.Log($"{debugPrefix} No CouchMultiplayer component found on player prefab! Adding component...");
             }
             
-            // Initialize cmp
+            // Initialize CouchMultiplayerPlayer
             cmp.Initialize(playerData);
 
             // Add to players

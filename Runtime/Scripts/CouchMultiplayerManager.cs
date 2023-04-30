@@ -67,6 +67,8 @@ namespace SLIDDES.Multiplayer.Couch
         [Tooltip("The max amount of displays used. Players are devided equally over the displays")]
         [Range(1, 8)]
         public int maxDisplays = 1;
+        [Tooltip("Allow for input switch when only 1 player is playing")]
+        public bool singlePlayerInputSwitch = true;
                 
         [Header("Debug Settings")]
         [Tooltip("Show debug messages from this script")]
