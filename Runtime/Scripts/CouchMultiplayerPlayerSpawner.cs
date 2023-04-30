@@ -151,7 +151,7 @@ namespace SLIDDES.Multiplayer.Couch
             {
                 // Get display data for each player
                 PlayerData[] playerDisplays = Display.GetPlayerDisplays(CouchMultiplayerManager.Instance.maxDisplays, CouchMultiplayerManager.PlayerAmount);
-                Debug.Log(playerDisplays.Length);
+                
                 int pIndex = 0;
                 foreach(var player in players) // ductape solution but works
                 {
