@@ -82,7 +82,7 @@ namespace SLIDDES.Multiplayer.Couch
                 {
                     foreach(var item in config.gameObjectsFirstPersonLayer)
                     {
-                        if(config.setGameObjectLayersRecursively) item.SetLayerRecursively(overlayLayer); else item.layer = overlayLayer;
+                        if(config.setGameObjectLayersRecursively) item.transform.SetLayerRecursively(overlayLayer); else item.layer = overlayLayer;
                     }
                 }
                 // Set gameobject layers
@@ -90,7 +90,7 @@ namespace SLIDDES.Multiplayer.Couch
                 {
                     foreach(var item in config.gameObjectsThirdPersonLayer)
                     {
-                        if(config.setGameObjectLayersRecursively) item.SetLayerRecursively(layer); else item.layer = layer;
+                        if(config.setGameObjectLayersRecursively) item.transform.SetLayerRecursively(layer); else item.layer = layer;
                     }
                 }
             }

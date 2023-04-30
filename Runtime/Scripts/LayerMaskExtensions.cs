@@ -47,12 +47,12 @@ namespace SLIDDES.Multiplayer.Couch
         /// <summary>
         /// Set the layer & the children layers
         /// </summary>
-        /// <param name="gameObject">The gameObject to set the layer</param>
+        /// <param name="transform">The transform to set the layer</param>
         /// <param name="layer">The new layer of the transform & its children</param>
-        public static void SetLayerRecursively(this GameObject gameObject, int layer)
+        public static void SetLayerRecursively(this Transform transform, int layer)
         {
-            gameObject.layer = layer;
-            foreach(GameObject child in gameObject.transform)
+            transform.gameObject.layer = layer;
+            foreach(Transform child in transform)
             {
                 child.SetLayerRecursively(layer);
             }
