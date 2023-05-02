@@ -13,10 +13,10 @@ namespace SLIDDES.Multiplayer.Couch
     public class CouchMultiplayerPlayer : MonoBehaviour
     {
         public PlayerData playerData;
-
-        [Header("Components")]
+                
         [Tooltip("Reference to the player input script")]
         public PlayerInput playerInput;
+        public new Camera camera;
 
         private readonly string debugPrefix = "[CouchMultiplayerPlayer]";
 

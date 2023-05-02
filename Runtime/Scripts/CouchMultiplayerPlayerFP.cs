@@ -10,7 +10,6 @@ namespace SLIDDES.Multiplayer.Couch
     /// </summary>
     public class CouchMultiplayerPlayerFP : CouchMultiplayerPlayer
     {
-        public new Camera camera;
         public Camera cameraOverlay;
         public LayerMask layerMaskCamera;
         public LayerMask layerMaskCameraOverlay;

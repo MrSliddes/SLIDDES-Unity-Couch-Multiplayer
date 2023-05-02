@@ -14,7 +14,7 @@ namespace SLIDDES.Multiplayer.Couch
         public void Initialize(CouchMultiplayerPlayer player)
         {
             components.player = player;
-            if(player.GetComponent<Camera>() != null) components.canvas.worldCamera = player.GetComponent<Camera>();
+            components.canvas.worldCamera = player.camera;
 
             events.onInitialized.Invoke();
         }
