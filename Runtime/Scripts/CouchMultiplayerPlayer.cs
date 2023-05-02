@@ -17,6 +17,8 @@ namespace SLIDDES.Multiplayer.Couch
         [Tooltip("Reference to the player input script")]
         public PlayerInput playerInput;
         public new Camera camera;
+        [Tooltip("The camera that renders the UI")]
+        public Camera cameraUI;
 
         private readonly string debugPrefix = "[CouchMultiplayerPlayer]";
 

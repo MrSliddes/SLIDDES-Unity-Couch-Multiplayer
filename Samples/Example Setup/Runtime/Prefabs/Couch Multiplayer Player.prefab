@@ -499,6 +499,7 @@ MonoBehaviour:
       height: -1
   playerInput: {fileID: 1294342700711312168}
   camera: {fileID: 7113882734307304470}
+  cameraUI: {fileID: 1798647349}
   cameraOverlay: {fileID: 1798647349}
   layerMaskCamera:
     serializedVersion: 2

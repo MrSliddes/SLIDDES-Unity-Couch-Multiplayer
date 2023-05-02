@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4157851745412560166}
   - component: {fileID: 4157851745412560161}
   - component: {fileID: 3463381484609194274}
+  - component: {fileID: 1190830899772317612}
   m_Layer: 5
   m_Name: Couch Multiplayer Player Canvas
   m_TagString: Untagged
@@ -121,6 +122,22 @@ MonoBehaviour:
     onInitialized:
       m_PersistentCalls:
         m_Calls: []
+--- !u!114 &1190830899772317612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4157851745412560160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff433a4d77da34c4f9c92742bd85031e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compareFunction: 8
+  setInactiveGraphics: 1
+  updateOnValidate: 0
+  graphics: []
 --- !u!1 &4157851745854742711
 GameObject:
   m_ObjectHideFlags: 0
