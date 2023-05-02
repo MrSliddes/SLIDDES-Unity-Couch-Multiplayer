@@ -27,7 +27,7 @@ namespace SLIDDES.Multiplayer.Couch
             // Set camera cullingMask, by turning bit off
             int[] includedLayers = layerMaskCamera.IncludedLayers();
             int cameraLayer = includedLayers[playerData.playerIndex];
-            camera.cullingMask &= ~(cameraLayer); // turn off bit
+            camera.cullingMask &= ~(1 << cameraLayer); // turn off bit
 
             // Set camera overlay layer, by turning bit on
             int[] includedOverlayLayers = layerMaskCameraOverlay.IncludedLayers();
