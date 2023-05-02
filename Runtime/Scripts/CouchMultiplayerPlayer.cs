@@ -12,10 +12,11 @@ namespace SLIDDES.Multiplayer.Couch
     [AddComponentMenu("SLIDDES/Multiplayer/Couch/Couch Multiplayer Player")]
     public class CouchMultiplayerPlayer : MonoBehaviour
     {
-        public PlayerData playerData;
-                
+        [Tooltip("The playerdata of this player")]
+        public PlayerData playerData;                
         [Tooltip("Reference to the player input script")]
         public PlayerInput playerInput;
+        [Tooltip("The camera of the player")]
         public new Camera camera;
         [Tooltip("The camera that renders the UI")]
         public Camera cameraUI;

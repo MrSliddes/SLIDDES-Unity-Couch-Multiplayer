@@ -16,7 +16,7 @@ namespace SLIDDES.Multiplayer.Couch
             components.player = player;
             components.canvas.worldCamera = player.cameraUI;
 
-            events.onInitialized.Invoke();
+            events.onInitialized.Invoke(player.gameObject);
         }
 
         [System.Serializable]
@@ -31,8 +31,8 @@ namespace SLIDDES.Multiplayer.Couch
         [System.Serializable]
         public class Events
         {
-            [Tooltip("Triggerd when the canvas is initialized")]
-            public UnityEvent onInitialized;
+            [Tooltip("Triggerd when the canvas is initialized. Sends gameobject of linked player")]
+            public UnityEvent<GameObject> onInitialized;
         }
     }
 }
