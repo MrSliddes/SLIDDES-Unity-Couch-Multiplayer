@@ -23,6 +23,9 @@ namespace SLIDDES.Multiplayer.Couch
             base.RefreshCamera();
 
             camera.rect = playerData.cameraViewPortRect;
+            camera.targetDisplay = playerData.cameraTargetDisplay;
+            cameraOverlay.rect = camera.rect;
+            cameraOverlay.targetDisplay = camera.targetDisplay;
 
             // Set camera cullingMask, by turning bit off
             int[] includedLayers = layerMaskCamera.IncludedLayers();
