@@ -12,7 +12,6 @@ namespace SLIDDES.Multiplayer.Couch
     {
         public new Camera camera;
         public Camera cameraOverlay;
-        public GameObject cameraCineMachine;
         public LayerMask layerMaskCamera;
         public LayerMask layerMaskCameraOverlay;
 
@@ -22,6 +21,30 @@ namespace SLIDDES.Multiplayer.Couch
         public override void RefreshCamera()
         {
             base.RefreshCamera();
+
+            camera.rect = playerData.cameraViewPortRect;
+
+            // Set camera cullingMask, by turning bit off
+            int[] includedLayers = layerMaskCamera.IncludedLayers();
+            int cameraLayer = includedLayers[playerData.playerIndex];
+            camera.cullingMask &= ~(cameraLayer); // turn off bit
+
+            // Set camera overlay layer, by turning bit on
+            int[] includedOverlayLayers = layerMaskCameraOverlay.IncludedLayers();
+            int cameraOverlayLayer = includedOverlayLayers[playerData.playerIndex];
+            cameraOverlay.cullingMask |= 1 << cameraOverlayLayer; // turn on bit
+
+            // First person gameobjects
+            foreach(var item in firstPersonGameObjects)
+            {
+                if(item.setLayerRecursively) item.item.transform.SetLayerRecursively(cameraOverlayLayer); else item.item.layer = cameraOverlayLayer;
+            }
+
+            // Third person gameobjects
+            foreach(var item in thirdPersonGameObjects)
+            {
+                if(item.setLayerRecursively) item.item.transform.SetLayerRecursively(cameraLayer); else item.item.layer = cameraLayer;
+            }
         }
 
         [System.Serializable]
