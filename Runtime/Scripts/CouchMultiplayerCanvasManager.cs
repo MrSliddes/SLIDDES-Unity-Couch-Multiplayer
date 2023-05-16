@@ -59,9 +59,12 @@ namespace SLIDDES.Multiplayer.Couch
             // Create a canvas for each player
             foreach(var item in components.playerSpawner.Players)
             {
+                CouchMultiplayerPlayer player = (CouchMultiplayerPlayer)item;
+                if(player == null) continue;
+
                 GameObject a = Instantiate(components.prefabPlayerCanvas, components.parentCanvases);
                 CouchMultiplayerPlayerCanvas canvas = a.GetComponent<CouchMultiplayerPlayerCanvas>();
-                canvas.Initialize(item);
+                canvas.Initialize(player);
                 playerCanvases.Add(canvas);
             }
         }

@@ -16,7 +16,7 @@ namespace SLIDDES.Multiplayer.Couch
         /// <summary>
         /// Contains all of the active players
         /// </summary>
-        public CouchMultiplayerPlayer[] Players => players.Values.ToArray();
+        public CouchMultiplayerPlayerBase[] Players => players.Values.ToArray();
 
         [Header("Values")]
         [Tooltip("Remove players that are already present in the scene for cleanup before spawning players")]
@@ -57,7 +57,7 @@ namespace SLIDDES.Multiplayer.Couch
         /// <summary>
         /// A list containing all of the active players
         /// </summary>
-        private Dictionary<PlayerData, CouchMultiplayerPlayer> players = new Dictionary<PlayerData, CouchMultiplayerPlayer>();
+        private Dictionary<PlayerData, CouchMultiplayerPlayerBase> players = new Dictionary<PlayerData, CouchMultiplayerPlayerBase>();
 
         private void OnEnable()
         {
@@ -95,8 +95,8 @@ namespace SLIDDES.Multiplayer.Couch
         /// </summary>
         public void ClearPlayersInScene()
         {
-            CouchMultiplayerPlayer[] foundPlayers = FindObjectsOfType<CouchMultiplayerPlayer>();
-            foreach(CouchMultiplayerPlayer player in foundPlayers)
+            CouchMultiplayerPlayerBase[] foundPlayers = FindObjectsOfType<CouchMultiplayerPlayerBase>();
+            foreach(CouchMultiplayerPlayerBase player in foundPlayers)
             {
                 if(player.gameObject != null) Destroy(player.gameObject);
             }
@@ -135,19 +135,20 @@ namespace SLIDDES.Multiplayer.Couch
             a.transform.SetParent(parentTransformPlayers);
 
             // Get / create cmp
-            CouchMultiplayerPlayer cmp = a.GetComponentInChildren<CouchMultiplayerPlayer>();
-            if(cmp == null)
+            CouchMultiplayerPlayerBase cmpb = a.GetComponent<CouchMultiplayerPlayerBase>();
+            if(cmpb == null) cmpb = a.GetComponentInChildren<CouchMultiplayerPlayerBase>();
+            if(cmpb == null)
             {
                 // No cmp component on player, add cmp component
-                cmp = a.AddComponent<CouchMultiplayerPlayer>();
-                if(showDebug) Debug.Log($"{debugPrefix} No CouchMultiplayer component found on player prefab! Adding component...");
+                cmpb = a.AddComponent<CouchMultiplayerPlayerBase>();
+                if(showDebug) Debug.Log($"{debugPrefix} No CouchMultiplayerBase component found on player prefab! Adding component...");
             }
             
             // Initialize CouchMultiplayerPlayer
-            cmp.Initialize(playerData);
+            cmpb.Initialize(playerData);
 
             // Add to players
-            players.Add(playerData, cmp);
+            players.Add(playerData, cmpb);
 
             // Refresh cameras
             if(enableSplitScreen)
@@ -180,7 +181,7 @@ namespace SLIDDES.Multiplayer.Couch
             // If spawn positions aren't set
             if(playerSpawnPositions == null || playerSpawnPositions.Length == 0)
             {
-                if(showDebug) Debug.LogWarning($"{debugPrefix} No spawn positions available for player! Spawning player on {gameObject.name}...");
+                if(showDebug) Debug.Log($"{debugPrefix} No spawn positions available for player! Spawning player on {gameObject.name}...");
                 return transform;
             }
 

@@ -17,6 +17,8 @@ namespace SLIDDES.Multiplayer.Couch
         public GameObjectItem[] firstPersonGameObjects;
         public GameObjectItem[] thirdPersonGameObjects;
 
+        public override string DebugPrefix() => "[CouchMultiplayerPlayerFP]";
+
         public override void RefreshCamera()
         {
             base.RefreshCamera();
