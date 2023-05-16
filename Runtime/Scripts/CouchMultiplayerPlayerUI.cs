@@ -10,6 +10,8 @@ namespace SLIDDES.Multiplayer.Couch
     /// </summary>
     public class CouchMultiplayerPlayerUI : CouchMultiplayerPlayerBase
     {
+        public GameObject CurrentSelectedGameObject => components.currentSelectedGameObject;
+
         public Components components;
 
         public override void Initialize(PlayerData playerData)
@@ -27,6 +29,16 @@ namespace SLIDDES.Multiplayer.Couch
         }
 
         public override string DebugPrefix() => "[CouchMultiplayerPlayerUI] No CouchMultiplayerPlayerUIManager found! Make sure to add a CouchMultiplayerPlayerUIManager component in the scene";
+
+        /// <summary>
+        /// Set the UI current selected gameobject
+        /// </summary>
+        /// <param name="gameObject"></param>
+        public void SetCurrentSelectedGameObject(GameObject gameObject)
+        {
+            components.currentSelectedGameObject = gameObject;
+            components.multiplayerEventSystem.SetSelectedGameObject(gameObject);
+        }
 
         [System.Serializable]
         public class Components

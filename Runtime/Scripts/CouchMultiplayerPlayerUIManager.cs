@@ -37,12 +37,17 @@ namespace SLIDDES.Multiplayer.Couch
         public void AddPlayerUI(CouchMultiplayerPlayerUI playerUI)
         {
             // Set
-            playerUI.components.multiplayerEventSystem.firstSelectedGameObject = components.firstSelected;
-            playerUI.components.currentSelectedGameObject = components.firstSelected;
+            playerUI.SetCurrentSelectedGameObject(components.firstSelected);
 
             if(values.sharedPlayerUI)
             {
                 playerUI.components.multiplayerEventSystem.playerRoot = components.playerRoot;
+
+                // If a playerUI is already active & single UI
+                if(values.singleSelectedUIGameObject && playerUIs.Count != 0)
+                {
+                    playerUI.SetCurrentSelectedGameObject(playerUIs[0].components.currentSelectedGameObject);
+                }
             }
             else
             {
@@ -51,6 +56,20 @@ namespace SLIDDES.Multiplayer.Couch
             }
 
             playerUIs.Add(playerUI);
+        }
+
+        /// <summary>
+        /// Set all playerUIs selected gameobject if singleSelectedUIGameObjects is active
+        /// </summary>
+        /// <param name="gameObject"></param>
+        public void SetCurrentSelectedGameObject(GameObject gameObject)
+        {
+            if(!values.singleSelectedUIGameObject) return;
+
+            foreach(var item in playerUIs)
+            {
+                item.SetCurrentSelectedGameObject(gameObject);
+            }
         }
 
 
@@ -67,7 +86,7 @@ namespace SLIDDES.Multiplayer.Couch
             for(int i = 0; i < playerUIs.Count; i++) // No Unity callback available when something new is selected so we have to use this non optimized method
             {
                 CouchMultiplayerPlayerUI playerUI = playerUIs[i];
-                if(playerUI.components.currentSelectedGameObject != playerUI.components.multiplayerEventSystem.currentSelectedGameObject)
+                if(playerUI.CurrentSelectedGameObject != playerUI.components.multiplayerEventSystem.currentSelectedGameObject)
                 {
                     // New gameobject was selected, tell other playerUI's
                     playerUI.components.currentSelectedGameObject = playerUI.components.multiplayerEventSystem.currentSelectedGameObject;
@@ -83,8 +102,7 @@ namespace SLIDDES.Multiplayer.Couch
                 {
                     if(i == index) continue; // skip cause already set
 
-                    playerUIs[i].components.currentSelectedGameObject = playerUIs[index].components.currentSelectedGameObject;
-                    playerUIs[i].components.multiplayerEventSystem.SetSelectedGameObject(playerUIs[i].components.currentSelectedGameObject);
+                    playerUIs[i].SetCurrentSelectedGameObject(playerUIs[index].CurrentSelectedGameObject);
                 }
             }
         }
