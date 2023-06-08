@@ -14,5 +14,12 @@
   },
   "type": "library",
   "unity": "2020.3",
-  "hideInEditor": false
+  "hideInEditor": false,
+    "samples": [
+        {
+            "displayName": "Example Setup",
+            "description": "Shows how a scene should be setup with the components",
+            "path": "Samples/Example Setup"
+        }
+    ]
 }
