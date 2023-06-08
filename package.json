@@ -19,7 +19,7 @@
         {
             "displayName": "Example Setup",
             "description": "Shows how a scene should be setup with the components",
-            "path": "Samples/Example Setup"
+            "path": "Samples~/Example Setup"
         }
     ]
 }
