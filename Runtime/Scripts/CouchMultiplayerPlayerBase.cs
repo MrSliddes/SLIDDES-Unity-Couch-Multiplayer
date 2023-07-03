@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace SLIDDES.Multiplayer.Couch
@@ -14,6 +15,8 @@ namespace SLIDDES.Multiplayer.Couch
         public PlayerData playerData;
         [Tooltip("Reference to the player input script")]
         public PlayerInput playerInput;
+
+        public UnityEvent onInitialized;
 
         /// <summary>
         /// Initialize the player with the playerData
@@ -36,6 +39,8 @@ namespace SLIDDES.Multiplayer.Couch
                 playerInput.neverAutoSwitchControlSchemes = !CouchMultiplayerManager.Instance.singlePlayerInputSwitch;
             }
             else playerInput.neverAutoSwitchControlSchemes = true;
+
+            onInitialized?.Invoke();
         }
 
         // Start is called before the first frame update
