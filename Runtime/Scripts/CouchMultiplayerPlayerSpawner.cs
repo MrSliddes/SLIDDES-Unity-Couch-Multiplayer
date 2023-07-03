@@ -132,8 +132,10 @@ namespace SLIDDES.Multiplayer.Couch
             //GameObject a = Instantiate(prefabPlayer, spawn.position, spawn.rotation);            
             PlayerInput playerInput = PlayerInput.Instantiate(prefabPlayer, playerData.playerIndex, "", -1, pairWithDevice: playerData.inputDevice);
             GameObject a = playerInput.gameObject;
+            a.transform.SetParent(spawn); // set gameobject position first with setParent to move child gameobjects too
             a.transform.SetParent(parentTransformPlayers);
-            a.transform.position = spawn.position;
+            //a.transform.SetParent(parentTransformPlayers);
+            //a.transform.position = spawn.position;
 
             // Get / create cmp
             CouchMultiplayerPlayerBase cmpb = a.GetComponent<CouchMultiplayerPlayerBase>();
