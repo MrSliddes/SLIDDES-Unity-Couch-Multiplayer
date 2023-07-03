@@ -1,6 +1,6 @@
 {
   "name": "com.sliddes.couch-multiplayer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "SLIDDES Couch Multiplayer",
   "description": "A package for easy to use couch multiplayer setup",
   "keywords": [
@@ -15,11 +15,11 @@
   "type": "library",
   "unity": "2020.3",
   "hideInEditor": false,
-    "samples": [
-        {
-            "displayName": "Example Setup",
-            "description": "Shows how a scene should be setup with the components",
-            "path": "Samples~/Example Setup"
-        }
-    ]
+  "samples": [
+    {
+      "displayName": "Example Setup",
+      "description": "Shows how a scene should be setup with the components",
+      "path": "Samples~/Example Setup"
+    }
+  ]
 }

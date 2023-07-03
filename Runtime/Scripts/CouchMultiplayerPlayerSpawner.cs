@@ -133,6 +133,7 @@ namespace SLIDDES.Multiplayer.Couch
             PlayerInput playerInput = PlayerInput.Instantiate(prefabPlayer, playerData.playerIndex, "", -1, pairWithDevice: playerData.inputDevice);
             GameObject a = playerInput.gameObject;
             a.transform.SetParent(parentTransformPlayers);
+            a.transform.position = spawn.position;
 
             // Get / create cmp
             CouchMultiplayerPlayerBase cmpb = a.GetComponent<CouchMultiplayerPlayerBase>();
