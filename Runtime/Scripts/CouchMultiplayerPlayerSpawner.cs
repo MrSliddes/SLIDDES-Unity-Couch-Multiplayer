@@ -21,6 +21,8 @@ namespace SLIDDES.Multiplayer.Couch
         [Header("Values")]
         [Tooltip("Remove players that are already present in the scene for cleanup before spawning players")]
         public bool removePlayersOnAwake = true;
+        [Tooltip("Clear the playerData stored in manager on start")]
+        public bool clearPlayerDataOnStart;
         [Tooltip("Spawn the connected players (from CouchMutliplayerManager) on start")]
         public bool spawnOnStart;
 
@@ -91,6 +93,7 @@ namespace SLIDDES.Multiplayer.Couch
 
         private void Start()
         {
+            if(clearPlayerDataOnStart) CouchMultiplayerManager.Instance.ClearPlayers();
             if(spawnOnStart) SpawnAllPlayers();
         }
 
