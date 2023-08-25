@@ -179,6 +179,14 @@ namespace SLIDDES.Multiplayer.Couch
 
             onAddPlayer.Invoke(playerData);
         }
-               
+        
+        /// <summary>
+        /// Clear all players connected
+        /// </summary>
+        public void ClearPlayers()
+        {
+            players.Clear();
+            playerIndexCounter = 0;
+        }
     }
 }

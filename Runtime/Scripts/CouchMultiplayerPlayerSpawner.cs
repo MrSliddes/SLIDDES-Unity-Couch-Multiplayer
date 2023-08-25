@@ -21,6 +21,8 @@ namespace SLIDDES.Multiplayer.Couch
         [Header("Values")]
         [Tooltip("Remove players that are already present in the scene for cleanup before spawning players")]
         public bool removePlayersOnAwake = true;
+        [Tooltip("Spawn the connected players (from CouchMutliplayerManager) on start")]
+        public bool spawnOnStart;
 
         [Header("Split-Screen")]
         public bool enableSplitScreen;
@@ -29,8 +31,6 @@ namespace SLIDDES.Multiplayer.Couch
 
         [Tooltip("Show debug messages from this script")]
         public bool showDebug;
-        //[Tooltip("Spawn the max amount of players on start")] TODO
-        //public bool spawnMaxPlayers;
 
         [Header("Components")]
         [Tooltip("The prefab of the player to be spawned")]
@@ -89,6 +89,10 @@ namespace SLIDDES.Multiplayer.Couch
             if(parentTransformPlayers == null) parentTransformPlayers = transform;
         }
 
+        private void Start()
+        {
+            if(spawnOnStart) SpawnAllPlayers();
+        }
 
         /// <summary>
         /// Clears all present player gameobjects in the scene
@@ -107,6 +111,17 @@ namespace SLIDDES.Multiplayer.Couch
         public void DespawnPlayer(PlayerData playerData) // TODO
         {
 
+        }
+
+        /// <summary>
+        /// Spawn all players connected to couchMultiplayerManager
+        /// </summary>
+        public void SpawnAllPlayers()
+        {
+            foreach(PlayerData playerData in CouchMultiplayerManager.PlayerDatas)
+            {
+                SpawnPlayer(playerData);
+            }
         }
 
         /// <summary>
