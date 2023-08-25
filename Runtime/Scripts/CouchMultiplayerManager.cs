@@ -136,6 +136,7 @@ namespace SLIDDES.Multiplayer.Couch
                 joinAction.action.Enable();
             }
         }
+               
 
         /// <summary>
         /// Add a player to the couch

@@ -97,6 +97,7 @@ namespace SLIDDES.Multiplayer.Couch
             if(spawnOnStart) SpawnAllPlayers();
         }
 
+
         /// <summary>
         /// Clears all present player gameobjects in the scene
         /// </summary>
@@ -111,9 +112,13 @@ namespace SLIDDES.Multiplayer.Couch
             players.Clear();
         }
 
-        public void DespawnPlayer(PlayerData playerData) // TODO
+        /// <summary>
+        /// Clears the players in the manager and in scene
+        /// </summary>
+        public void ClearPlayersInSceneAndManager()
         {
-
+            ClearPlayersInScene();
+            CouchMultiplayerManager.Instance.ClearPlayers();
         }
 
         /// <summary>
