@@ -42,10 +42,12 @@ namespace SLIDDES.Multiplayer.Couch
                 if(value)
                 {
                     Instance.inputActionAddPlayer.Enable();
+                    Instance.joinAction.action.Enable();
                 }
                 else
                 {
                     Instance.inputActionAddPlayer.Disable();
+                    Instance.joinAction.action.Disable();
                 }
             }
         }
