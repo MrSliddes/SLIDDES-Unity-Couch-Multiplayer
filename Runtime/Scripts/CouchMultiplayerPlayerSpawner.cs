@@ -20,29 +20,33 @@ namespace SLIDDES.Multiplayer.Couch
 
         [Header("Values")]
         [Tooltip("Remove players that are already present in the scene for cleanup before spawning players")]
-        public bool removePlayersOnAwake = true;
+        [SerializeField] private bool removePlayersOnAwake = true;
         [Tooltip("Clear the playerData stored in manager on start")]
-        public bool clearPlayerDataOnStart;
+        [SerializeField] private bool clearPlayerDataOnStart;
         [Tooltip("Spawn the connected players (from CouchMutliplayerManager) on start")]
-        public bool spawnOnStart;
+        [SerializeField] private bool spawnOnStart;
+        [Tooltip("The amount of players to spawn once this spawner has initalized")]
+        [SerializeField] private int playersToSpawnOnInitialized;
 
         [Header("Split-Screen")]
-        public bool enableSplitScreen;
-        //public SplitScreenDivision splitScreenDivision;
-        //public DisplayDivision displayDivision;
+        [SerializeField] private bool enableSplitScreen;
 
+        [Header("Debug")]
         [Tooltip("Show debug messages from this script")]
-        public bool showDebug;
+        [SerializeField] private bool showDebug;
 
         [Header("Components")]
         [Tooltip("The prefab of the player to be spawned")]
-        public GameObject prefabPlayer;
+        [SerializeField] private GameObject prefabPlayer;
         [Tooltip("The parent transform where all instantiated players will be parented under. If left null this gameObject transform will be assigned as parent")]
-        public Transform parentTransformPlayers;
+        [SerializeField] private Transform parentTransformPlayers;
         [Tooltip("The spawn points for each player. If the amount of players exceeds the amount of spawn points the players will spawn at the last spawn point index")]
-        public Transform[] playerSpawnPositions;
+        [SerializeField] private Transform[] playerSpawnPositions;
 
-        public Events events;
+        [Tooltip("When a player gameobject gets instantiated")]
+        public UnityEvent<GameObject> onPlayerInstantiate;
+        [Tooltip("When the spawner is done spawning players")]
+        public UnityEvent onFinishedSpawning;
 
         /// <summary>
         /// Keeps track of on what spawn point to spawn the next player
@@ -60,6 +64,14 @@ namespace SLIDDES.Multiplayer.Couch
         /// A list containing all of the active players
         /// </summary>
         private Dictionary<PlayerData, CouchMultiplayerPlayerBase> players = new Dictionary<PlayerData, CouchMultiplayerPlayerBase>();
+
+        private void Awake()
+        {
+            // Check removing old players
+            if(removePlayersOnAwake) ClearPlayersInScene();
+            // Assign parent if null
+            if(parentTransformPlayers == null) parentTransformPlayers = transform;
+        }
 
         private void OnEnable()
         {
@@ -80,21 +92,37 @@ namespace SLIDDES.Multiplayer.Couch
                 // Detach to couchMultiplayerManager
                 CouchMultiplayerManager.Instance.onAddPlayer.RemoveListener(actionSpawnPlayer);
             }
-
-        }
-
-        private void Awake()
-        {
-            // Check removing old players
-            if(removePlayersOnAwake) ClearPlayersInScene();
-            // Assign parent if null
-            if(parentTransformPlayers == null) parentTransformPlayers = transform;
         }
 
         private void Start()
         {
             if(clearPlayerDataOnStart) CouchMultiplayerManager.Instance.ClearPlayers();
+            if(playersToSpawnOnInitialized > 0)
+            {
+                InputDevice[] inputDevices = InputSystem.devices.ToArray();
+                if(showDebug)
+                {
+                    foreach(var item in inputDevices)
+                    {
+                        Debug.Log($"{debugPrefix} Found inputDevice: {item.displayName}");
+                    }
+                }
+                for(int i = 0; i < playersToSpawnOnInitialized; i++)
+                {
+                    // Check if input device available
+                    if(i < inputDevices.Length)
+                    {
+                        if(inputDevices[i].displayName == "Mouse") continue;
+                        CouchMultiplayerManager.Instance.AddPlayer(inputDevices[i]);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
             if(spawnOnStart) SpawnAllPlayers();
+            onFinishedSpawning?.Invoke();
         }
 
 
@@ -177,7 +205,7 @@ namespace SLIDDES.Multiplayer.Couch
             if(enableSplitScreen)
             {
                 // Get display data for each player
-                PlayerData[] playerDisplays = Display.GetPlayerDisplays(CouchMultiplayerManager.Instance.maxDisplays, CouchMultiplayerManager.PlayerAmount);
+                PlayerData[] playerDisplays = Display.GetPlayerDisplays(CouchMultiplayerManager.MaxDisplays, CouchMultiplayerManager.PlayerAmount);
                 
                 int pIndex = 0;
                 foreach(var player in players) // ductape solution but works
@@ -189,11 +217,9 @@ namespace SLIDDES.Multiplayer.Couch
                 }
             }
 
-            events.onPlayerInstantiate.Invoke(a);
+            onPlayerInstantiate?.Invoke(a);
             if(showDebug) Debug.Log($"{debugPrefix} Spawned player with playerIndex {playerData.playerIndex}");
         }
-
-
 
         /// <summary>
         /// Returns the current player spawn position
@@ -216,25 +242,6 @@ namespace SLIDDES.Multiplayer.Couch
                 playerSpawnPointIndex++;
             }
             return playerSpawnPositions[i];
-        }
-
-
-        public enum SplitScreenDivision
-        {
-            standard,
-            vertical
-        }
-
-        public enum DisplayDivision
-        {
-            equally
-        }
-
-        [System.Serializable]
-        public class Events
-        {
-            [Tooltip("When a player gameobject gets instantiated")]
-            public UnityEvent<GameObject> onPlayerInstantiate;
         }
     }
 }

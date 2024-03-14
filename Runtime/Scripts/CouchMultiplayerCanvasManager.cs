@@ -34,14 +34,14 @@ namespace SLIDDES.Multiplayer.Couch
             if(components.parentCanvases == null) components.parentCanvases = transform;
 
             actionOnAddPlayer = x => GeneratePlayerCanvases();
-            components.playerSpawner.events.onPlayerInstantiate.AddListener(actionOnAddPlayer);
+            components.playerSpawner.onPlayerInstantiate.AddListener(actionOnAddPlayer);
 
             GeneratePlayerCanvases();
         }
 
         private void OnDisable()
         {
-            components.playerSpawner.events.onPlayerInstantiate.RemoveListener(actionOnAddPlayer);
+            components.playerSpawner.onPlayerInstantiate.RemoveListener(actionOnAddPlayer);
         }
 
         /// <summary>

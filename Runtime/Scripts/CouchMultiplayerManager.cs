@@ -21,17 +21,9 @@ namespace SLIDDES.Multiplayer.Couch
         /// The singular instance of the couch multiplayer manager
         /// </summary>
         public static CouchMultiplayerManager Instance => instance;
-
-        // Shortcuts
         /// <summary>
         /// Get an array of all players playerData
         /// </summary>
-        public static PlayerData[] PlayerDatas => Instance.players.Values.ToArray();
-        /// <summary>
-        /// Amount of players currently active
-        /// </summary>
-        public static int PlayerAmount => Instance.players.Count;
-
         public static bool PlayersCanJoin
         {
             get => Instance.playersCanJoin;
@@ -51,12 +43,21 @@ namespace SLIDDES.Multiplayer.Couch
                 }
             }
         }
+        public static bool SinglePlayerInputSwitch => Instance.singlePlayerInputSwitch;
+        public static int MaxPlayers => Instance.maxPlayers;
+        public static int MaxDisplays => Instance.maxDisplays;
+        /// <summary>
+        /// Amount of players currently active
+        /// </summary>
+        public static int PlayerAmount => Instance.players.Count;
+        public static PlayerData[] PlayerDatas => Instance.players.Values.ToArray();
 
-        // Values
+
+        [Header("Values")]
         [Tooltip("Dont destroy this gameObject when loading a new scene. Recommended to be set to true")]
-        public bool dontDestroyOnLoad = true;
+        [SerializeField] private bool dontDestroyOnLoad = true;
         [Tooltip("Device names that are excluded from being recognised as a player")]
-        public string[] excludedDeviceNames = new string[] { "Mouse" };
+        [SerializeField] private string[] excludedDeviceNames = new string[] { "Mouse" };
 
         [Header("Player Settings")]
         [Tooltip("Allow for players to join the game?")]
@@ -65,12 +66,12 @@ namespace SLIDDES.Multiplayer.Couch
         public InputActionProperty joinAction;
         [Range(1, 8)]
         [Tooltip("The maximum amount of players that can play")]
-        public int maxPlayers = 8;
+        [SerializeField] private int maxPlayers = 8;
         [Tooltip("The max amount of displays used. Players are devided equally over the displays")]
         [Range(1, 8)]
-        public int maxDisplays = 1;
+        [SerializeField] private int maxDisplays = 1;
         [Tooltip("Allow for input switch when only 1 player is playing")]
-        public bool singlePlayerInputSwitch = true;
+        [SerializeField] private bool singlePlayerInputSwitch = true;
                 
         [Header("Debug Settings")]
         [Tooltip("Show debug messages from this script")]
@@ -186,6 +187,15 @@ namespace SLIDDES.Multiplayer.Couch
             onAddPlayer.Invoke(playerData);
         }
         
+        /// <summary>
+        /// Add a player to the couch
+        /// </summary>
+        /// <param name="context"></param>
+        public void AddPlayer(InputAction.CallbackContext context)
+        {
+            AddPlayer(context.control.device);
+        }
+
         /// <summary>
         /// Clear all players connected
         /// </summary>

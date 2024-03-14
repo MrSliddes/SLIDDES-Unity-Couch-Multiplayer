@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SLIDDES.Multiplayer.Couch
 {
-    public class CouchMultiplayerAllowJoining : MonoBehaviour
+    public class CouchMultiplayerManagerHandler : MonoBehaviour
     {
         [Tooltip("Allow couch mutliplayer joining in this scene?")]
         public bool allowJoining = true;

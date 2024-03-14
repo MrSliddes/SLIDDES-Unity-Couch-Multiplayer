@@ -424,7 +424,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6742932953245108827}
   - component: {fileID: 1294342700711312168}
-  - component: {fileID: 550706380295825031}
+  - component: {fileID: 9061274035596067173}
+  - component: {fileID: 3939965379172523258}
   - component: {fileID: 8562232994307079415}
   m_Layer: 0
   m_Name: Couch Multiplayer Player
@@ -465,7 +466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: c294e6d272918be41a9d93445b456d7b, type: 3}
   m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
+  m_UIInputModule: {fileID: 3939965379172523258}
   m_DeviceLostEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -478,7 +479,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 550706380295825031}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SLIDDES.Multiplayer.Couch.Samples.Mover, SLIDDES.Multiplayer.Couch.Samples
         m_MethodName: OnMovement
         m_Mode: 0
@@ -533,7 +534,7 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &550706380295825031
+--- !u!114 &9061274035596067173
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -542,9 +543,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 6742932953245108829}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ea0e0fae1e56f4fa578e075dc31659, type: 3}
+  m_Script: {fileID: 11500000, guid: b16c6f78230fa4964a222622d8aae332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+  m_PlayerRoot: {fileID: 0}
+--- !u!114 &3939965379172523258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6742932953245108829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: c294e6d272918be41a9d93445b456d7b, type: 3}
+  m_PointAction: {fileID: 0}
+  m_MoveAction: {fileID: 0}
+  m_SubmitAction: {fileID: 0}
+  m_CancelAction: {fileID: 0}
+  m_LeftClickAction: {fileID: 0}
+  m_MiddleClickAction: {fileID: 0}
+  m_RightClickAction: {fileID: 0}
+  m_ScrollWheelAction: {fileID: -5481922904421886159, guid: c294e6d272918be41a9d93445b456d7b, type: 3}
+  m_TrackedDevicePositionAction: {fileID: 0}
+  m_TrackedDeviceOrientationAction: {fileID: 0}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!114 &8562232994307079415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567,6 +602,9 @@ MonoBehaviour:
       width: -1
       height: -1
   playerInput: {fileID: 1294342700711312168}
+  onInitialized:
+    m_PersistentCalls:
+      m_Calls: []
   camera: {fileID: 7113882734307304470}
   cameraUI: {fileID: 1798647349}
   cameraOverlay: {fileID: 1798647349}

@@ -27,16 +27,20 @@ namespace SLIDDES.Multiplayer.Couch
         {
             this.playerData = playerData;
 
-            if(playerInput == null) { GetComponentInChildren<PlayerInput>(); }
             if(playerInput == null)
             {
-                Debug.LogError($"{DebugPrefix()} playerInput is not assigned. Please assign the component reference");
+                playerInput = GetComponent<PlayerInput>();
+                if(playerInput == null) GetComponentInChildren<PlayerInput>();
+                if(playerInput == null)
+                {
+                    Debug.LogError($"{DebugPrefix()} playerInput is not assigned. Please assign the component reference");
+                }
             }
 
             // Set auto switch
-            if(CouchMultiplayerManager.Instance.maxPlayers == 1)
+            if(CouchMultiplayerManager.MaxPlayers == 1)
             {
-                playerInput.neverAutoSwitchControlSchemes = !CouchMultiplayerManager.Instance.singlePlayerInputSwitch;
+                playerInput.neverAutoSwitchControlSchemes = !CouchMultiplayerManager.SinglePlayerInputSwitch;
             }
             else playerInput.neverAutoSwitchControlSchemes = true;
 
