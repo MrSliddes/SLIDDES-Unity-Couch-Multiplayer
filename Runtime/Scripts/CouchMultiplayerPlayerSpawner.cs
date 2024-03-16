@@ -64,6 +64,7 @@ namespace SLIDDES.Multiplayer.Couch
         /// A list containing all of the active players
         /// </summary>
         private Dictionary<PlayerData, CouchMultiplayerPlayerBase> players = new Dictionary<PlayerData, CouchMultiplayerPlayerBase>();
+        private Coroutine coroutineSpawnAllPlayers;
 
         private void Awake()
         {
@@ -122,7 +123,6 @@ namespace SLIDDES.Multiplayer.Couch
                 }
             }
             if(spawnOnStart) SpawnAllPlayers();
-            onFinishedSpawning?.Invoke();
         }
 
 
@@ -154,10 +154,8 @@ namespace SLIDDES.Multiplayer.Couch
         /// </summary>
         public void SpawnAllPlayers()
         {
-            foreach(PlayerData playerData in CouchMultiplayerManager.PlayerDatas)
-            {
-                SpawnPlayer(playerData);
-            }
+            if(coroutineSpawnAllPlayers != null) StopCoroutine(coroutineSpawnAllPlayers);
+            coroutineSpawnAllPlayers = StartCoroutine(SpawnAllPlayersAsync());
         }
 
         /// <summary>
@@ -242,6 +240,18 @@ namespace SLIDDES.Multiplayer.Couch
                 playerSpawnPointIndex++;
             }
             return playerSpawnPositions[i];
+        }
+
+        private IEnumerator SpawnAllPlayersAsync()
+        {
+            foreach(PlayerData playerData in CouchMultiplayerManager.PlayerDatas)
+            {
+                SpawnPlayer(playerData);
+            }
+            // Wait for gameobject to be created
+            yield return null;
+            onFinishedSpawning?.Invoke();
+            yield break;
         }
     }
 }
