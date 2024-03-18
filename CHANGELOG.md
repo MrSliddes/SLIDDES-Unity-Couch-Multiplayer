@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.4.0]
+### Added
+- CouchMultiplayerLobby.cs
+- CouchMultiplayerLobbyController.cs
+
 ## [1.3.0] - 14/03/2024
 ### Changed
 - Improved code
