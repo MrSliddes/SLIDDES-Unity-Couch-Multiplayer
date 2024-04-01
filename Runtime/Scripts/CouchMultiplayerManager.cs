@@ -83,6 +83,7 @@ namespace SLIDDES.Multiplayer.Couch
         [Header("Events")]
         [Tooltip("When a new player gets added")]
         public UnityEvent<PlayerData> onAddPlayer;
+        public UnityEvent<PlayerData> onRemovePlayer;
 
         /// <summary>
         /// The private reference to the CCM
@@ -194,6 +195,18 @@ namespace SLIDDES.Multiplayer.Couch
         public void AddPlayer(InputAction.CallbackContext context)
         {
             AddPlayer(context.control.device);
+        }
+
+        public void RemovePlayer(InputDevice inputDevice)
+        {
+            if(!players.ContainsKey(inputDevice))
+            {
+                return;
+            }
+
+            players.Remove(inputDevice);
+            PlayerData playerData = players[inputDevice];
+            onRemovePlayer?.Invoke(playerData);
         }
 
         /// <summary>
