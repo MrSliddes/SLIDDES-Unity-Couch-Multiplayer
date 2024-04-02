@@ -20,6 +20,13 @@ namespace SLIDDES.Multiplayer.Couch
                 canStartLobby = value;
             }
         }
+        public bool IsStartingLobby
+        { 
+            get
+            {
+                return isStartingLobby;
+            }
+        }
         public PlayerInput ActivePlayerInput
         {
             get
@@ -54,6 +61,7 @@ namespace SLIDDES.Multiplayer.Couch
         public UnityEvent onLobbyClear;
 
         private readonly string debugPrefix = "[CMPlayerLobby]";
+        private bool isStartingLobby;
         private PlayerInput activePlayerInput;
         private List<PlayerInput> joinedPlayers = new List<PlayerInput>();
         private Dictionary<string, InputCallback> inputCallbacksDictionary = new Dictionary<string, InputCallback>();
@@ -82,6 +90,8 @@ namespace SLIDDES.Multiplayer.Couch
 
         public void JoinLobby(PlayerInput playerInput)
         {
+            if(isStartingLobby) return;
+
             // Check if player isnt already in
             if(joinedPlayers.Contains(playerInput))
             {
@@ -101,7 +111,9 @@ namespace SLIDDES.Multiplayer.Couch
         }
 
         public void LeaveLobby(PlayerInput playerInput) 
-        { 
+        {
+            if(isStartingLobby) return;
+
             if(!joinedPlayers.Contains(playerInput))
             {
                 // Player never joined
@@ -137,6 +149,7 @@ namespace SLIDDES.Multiplayer.Couch
             switch(startingMode)
             {
                 case StartingMode.Instant:
+                    isStartingLobby = true;
                     onLobbyStarting?.Invoke();
                     StartLobby();
                     break;
@@ -168,6 +181,7 @@ namespace SLIDDES.Multiplayer.Couch
             {
                 StopCoroutine(coroutineStartingLobbyAsync);
                 coroutineStartingLobbyAsync = null;
+                isStartingLobby = false;
                 onLobbyCancelStarting?.Invoke();
             }
         }
@@ -238,6 +252,7 @@ namespace SLIDDES.Multiplayer.Couch
 
         private IEnumerator StartingLobbyAsync()
         {
+            isStartingLobby = true;
             onLobbyStarting?.Invoke();
 
             float time = startingTime;
