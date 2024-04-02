@@ -13,7 +13,7 @@ namespace SLIDDES.Multiplayer.Couch
         {
             get
             {
-                return canStartLobby;
+                return canStartLobby && joinedPlayers.Count >= minimumPlayersRequired;
             }
             set
             {
@@ -36,6 +36,7 @@ namespace SLIDDES.Multiplayer.Couch
 
         [SerializeField] private bool soloPlayerInput;
         [SerializeField] private bool canStartLobby = true;
+        [SerializeField] private int minimumPlayersRequired = 1;
         [SerializeField] private bool showDebug;
         [SerializeField] private InputCallback[] inputCallbacks;
 
