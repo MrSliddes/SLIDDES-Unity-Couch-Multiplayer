@@ -37,12 +37,19 @@ namespace SLIDDES.Multiplayer.Couch
         [SerializeField] private bool soloPlayerInput;
         [SerializeField] private bool canStartLobby = true;
         [SerializeField] private int minimumPlayersRequired = 1;
+        [Space]
+        [SerializeField] private StartingMode startingMode;
+        [SerializeField] private float startingTime = 0;
+        [Space]
         [SerializeField] private bool showDebug;
         [SerializeField] private InputCallback[] inputCallbacks;
 
         public UnityEvent<PlayerInput[]> onJoinedPlayersChanged;
         public UnityEvent<PlayerInput> onPlayerJoined;
         public UnityEvent<PlayerInput> onPlayerLeave;
+        public UnityEvent onLobbyStarting;
+        public UnityEvent<float> onLobbyStartingTimer;
+        public UnityEvent onLobbyCancelStarting;
         public UnityEvent onLobbyStart;
         public UnityEvent onLobbyClear;
 
@@ -50,6 +57,7 @@ namespace SLIDDES.Multiplayer.Couch
         private PlayerInput activePlayerInput;
         private List<PlayerInput> joinedPlayers = new List<PlayerInput>();
         private Dictionary<string, InputCallback> inputCallbacksDictionary = new Dictionary<string, InputCallback>();
+        private Coroutine coroutineStartingLobbyAsync;
 
         private void Awake()
         {
@@ -122,6 +130,48 @@ namespace SLIDDES.Multiplayer.Couch
             onLobbyClear?.Invoke();
         }
 
+        public void StartingLobby(InputAction.CallbackContext context)
+        {
+            if(!CanStartLobby) return;
+
+            switch(startingMode)
+            {
+                case StartingMode.Instant:
+                    onLobbyStarting?.Invoke();
+                    StartLobby();
+                    break;
+                case StartingMode.HoldToStart:
+                    if(context.performed)
+                    {                        
+                        if(coroutineStartingLobbyAsync != null) StopCoroutine(coroutineStartingLobbyAsync);
+                        coroutineStartingLobbyAsync = StartCoroutine(StartingLobbyAsync());
+                    }
+                    else if(context.canceled)
+                    {
+                        CancelStartingLobby(context);
+                    }
+                    break;
+                case StartingMode.CountDown:
+                    if(coroutineStartingLobbyAsync == null)
+                    {
+                        coroutineStartingLobbyAsync = StartCoroutine(StartingLobbyAsync());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void CancelStartingLobby(InputAction.CallbackContext context)
+        {
+            if(coroutineStartingLobbyAsync != null)
+            {
+                StopCoroutine(coroutineStartingLobbyAsync);
+                coroutineStartingLobbyAsync = null;
+                onLobbyCancelStarting?.Invoke();
+            }
+        }
+
         public void StartLobby()
         {
             if(!CanStartLobby) return;
@@ -186,11 +236,36 @@ namespace SLIDDES.Multiplayer.Couch
             ActivePlayerInput = joinedPlayers[index];
         }
 
+        private IEnumerator StartingLobbyAsync()
+        {
+            onLobbyStarting?.Invoke();
+
+            float time = startingTime;
+            while(time > 0)
+            {
+                yield return null;
+                time -= Time.unscaledDeltaTime;
+                onLobbyStartingTimer?.Invoke(time);
+            }
+
+            coroutineStartingLobbyAsync = null;
+            StartLobby();
+            yield break;
+        }
+
         [System.Serializable]
         public class InputCallback
         {
             public string inputActionName;
             public UnityEvent<InputAction.CallbackContext> onCallbackContext;
+        }
+
+        [System.Serializable]
+        public enum StartingMode
+        { 
+            Instant,
+            HoldToStart,
+            CountDown
         }
     }
 }
