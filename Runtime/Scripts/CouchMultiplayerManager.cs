@@ -204,8 +204,8 @@ namespace SLIDDES.Multiplayer.Couch
                 return;
             }
 
-            players.Remove(inputDevice);
             PlayerData playerData = players[inputDevice];
+            players.Remove(inputDevice);
             onRemovePlayer?.Invoke(playerData);
         }
 
