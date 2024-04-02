@@ -34,12 +34,18 @@ namespace SLIDDES.Multiplayer.Couch
                 if(value)
                 {
                     Instance.inputActionAddPlayer.Enable();
-                    Instance.joinAction.action.Enable();
+                    foreach(InputActionProperty joinAction in Instance.joinActions)
+                    {
+                        joinAction.action.Enable();
+                    }
                 }
                 else
                 {
                     Instance.inputActionAddPlayer.Disable();
-                    Instance.joinAction.action.Disable();
+                    foreach(InputActionProperty joinAction in Instance.joinActions)
+                    {
+                        joinAction.action.Disable();
+                    }
                 }
             }
         }
@@ -63,7 +69,7 @@ namespace SLIDDES.Multiplayer.Couch
         [Tooltip("Allow for players to join the game?")]
         [SerializeField] private bool playersCanJoin = true;
         [Tooltip("The button the player needs to press for joining")]
-        public InputActionProperty joinAction;
+        public InputActionProperty[] joinActions;
         [Range(1, 8)]
         [Tooltip("The maximum amount of players that can play")]
         [SerializeField] private int maxPlayers = 8;
@@ -131,16 +137,20 @@ namespace SLIDDES.Multiplayer.Couch
 
             // if the join action is a reference, clone it so we don't run into problems with the action being disabled by
             // PlayerInput when devices are assigned to individual players
-            if(joinAction.reference != null && joinAction.action?.actionMap?.asset != null)
+            for(int i = 0; i < joinActions.Length; i++)
             {
-                var inputActionAsset = Instantiate(joinAction.action.actionMap.asset);
-                var inputActionReference = InputActionReference.Create(inputActionAsset.FindAction(joinAction.action.name));
-                joinAction = new InputActionProperty(inputActionReference);
-                joinAction.action.performed += x =>
+                InputActionProperty joinAction = joinActions[i];
+                if(joinAction.reference != null && joinAction.action?.actionMap?.asset != null)
                 {
-                    if(playersCanJoin) AddPlayer(x.control.device);
-                };
-                joinAction.action.Enable();
+                    var inputActionAsset = Instantiate(joinAction.action.actionMap.asset);
+                    var inputActionReference = InputActionReference.Create(inputActionAsset.FindAction(joinAction.action.name));
+                    joinAction = new InputActionProperty(inputActionReference);
+                    joinAction.action.performed += x =>
+                    {
+                        if(playersCanJoin) AddPlayer(x.control.device);
+                    };
+                    joinAction.action.Enable();
+                }
             }
         }
                

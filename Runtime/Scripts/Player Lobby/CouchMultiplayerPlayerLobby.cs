@@ -66,6 +66,10 @@ namespace SLIDDES.Multiplayer.Couch
         private List<PlayerInput> joinedPlayers = new List<PlayerInput>();
         private Dictionary<string, InputCallback> inputCallbacksDictionary = new Dictionary<string, InputCallback>();
         private Coroutine coroutineStartingLobbyAsync;
+        /// <summary>
+        /// The input device that is starting the lobby
+        /// </summary>
+        private InputDevice startingLobbyInputDevice;
 
         private void Awake()
         {
@@ -137,6 +141,7 @@ namespace SLIDDES.Multiplayer.Couch
             {
                 onPlayerLeave?.Invoke(playerInput);
             }
+            startingLobbyInputDevice = null;
             joinedPlayers.Clear();
             onJoinedPlayersChanged?.Invoke(joinedPlayers.ToArray());
             onLobbyClear?.Invoke();
@@ -154,8 +159,18 @@ namespace SLIDDES.Multiplayer.Couch
                     StartLobby();
                     break;
                 case StartingMode.HoldToStart:
+                    // Only allow input device that started to perform / cancel the starting of lobby
+                    if(startingLobbyInputDevice == null)
+                    {
+                        startingLobbyInputDevice = context.control.device;
+                    }
+                    else if(startingLobbyInputDevice != context.control.device)
+                    {
+                        return;
+                    }
+
                     if(context.performed)
-                    {                        
+                    {
                         if(coroutineStartingLobbyAsync != null) StopCoroutine(coroutineStartingLobbyAsync);
                         coroutineStartingLobbyAsync = StartCoroutine(StartingLobbyAsync());
                     }
@@ -182,6 +197,7 @@ namespace SLIDDES.Multiplayer.Couch
                 StopCoroutine(coroutineStartingLobbyAsync);
                 coroutineStartingLobbyAsync = null;
                 isStartingLobby = false;
+                startingLobbyInputDevice = null;
                 onLobbyCancelStarting?.Invoke();
             }
         }
