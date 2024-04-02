@@ -83,6 +83,14 @@ namespace SLIDDES.Multiplayer.Couch
             }
         }
 
+        public void StartingLobby(InputAction.CallbackContext context)
+        {
+            if(ActiveLobby == null) return;
+            if(!AllowStarting) return;
+
+            ActiveLobby.StartingLobby(context);
+        }
+
         public void StartLobby(InputAction.CallbackContext context)
         {
             if(ActiveLobby == null) return;
