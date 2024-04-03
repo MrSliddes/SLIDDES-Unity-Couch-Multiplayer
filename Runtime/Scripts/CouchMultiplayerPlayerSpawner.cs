@@ -25,6 +25,7 @@ namespace SLIDDES.Multiplayer.Couch
         [SerializeField] private bool clearPlayerDataOnStart;
         [Tooltip("Spawn the connected players (from CouchMutliplayerManager) on start")]
         [SerializeField] private bool spawnOnStart;
+        [SerializeField] private bool orderSpawningOnLobbyID;
         [Tooltip("The amount of players to spawn once this spawner has initalized")]
         [SerializeField] private int playersToSpawnOnInitialized;
 
@@ -244,7 +245,13 @@ namespace SLIDDES.Multiplayer.Couch
 
         private IEnumerator SpawnAllPlayersAsync()
         {
-            foreach(PlayerData playerData in CouchMultiplayerManager.PlayerDatas)
+            PlayerData[] playerDatas = CouchMultiplayerManager.PlayerDatas;
+            if(orderSpawningOnLobbyID)
+            {
+                playerDatas = playerDatas.OrderBy(x => x.lobbyIndex).ToArray();
+            }
+
+            foreach(PlayerData playerData in playerDatas)
             {
                 SpawnPlayer(playerData);
             }
