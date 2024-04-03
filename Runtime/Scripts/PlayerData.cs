@@ -14,6 +14,8 @@ namespace SLIDDES.Multiplayer.Couch
         [Header("Values")]
         [Tooltip("The index number of this player")]
         public int playerIndex = -1;
+        [Tooltip("The index number of this player in a lobby")]
+        public int lobbyIndex = -1;
         [Tooltip("The index number of the display")]
         public int cameraTargetDisplay = -1;
         [Tooltip("The viewport rect of the camera")]

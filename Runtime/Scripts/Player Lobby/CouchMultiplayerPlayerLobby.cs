@@ -47,6 +47,7 @@ namespace SLIDDES.Multiplayer.Couch
         [Space]
         [SerializeField] private StartingMode startingMode;
         [SerializeField] private float startingTime = 0;
+        [SerializeField] private bool assignLobbyIDsOnStart = true;
         [Space]
         [SerializeField] private bool showDebug;
         [SerializeField] private InputCallback[] inputCallbacks;
@@ -147,6 +148,18 @@ namespace SLIDDES.Multiplayer.Couch
             onLobbyClear?.Invoke();
         }
 
+        public void AssignLobbyIDsToPlayers()
+        {
+            for(int i = 0; i < joinedPlayers.Count; i++)
+            {
+                PlayerData playerData = CouchMultiplayerManager.Instance.GetPlayerData(joinedPlayers[i]);
+                if(playerData != null)
+                {
+                    playerData.lobbyIndex = i;
+                }
+            }
+        }
+
         public void StartingLobby(InputAction.CallbackContext context)
         {
             if(!CanStartLobby) return;
@@ -205,6 +218,8 @@ namespace SLIDDES.Multiplayer.Couch
         public void StartLobby()
         {
             if(!CanStartLobby) return;
+
+            if(assignLobbyIDsOnStart) AssignLobbyIDsToPlayers();
 
             onLobbyStart?.Invoke();
         }

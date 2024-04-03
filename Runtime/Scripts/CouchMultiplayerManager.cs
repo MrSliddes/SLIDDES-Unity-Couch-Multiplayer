@@ -227,5 +227,10 @@ namespace SLIDDES.Multiplayer.Couch
             players.Clear();
             playerIndexCounter = 0;
         }
+
+        public PlayerData GetPlayerData(PlayerInput playerInput)
+        {
+            return players.Values.FirstOrDefault(x => x.inputDevice == playerInput.devices[0]);
+        }
     }
 }
