@@ -6,12 +6,50 @@ namespace SLIDDES.Multiplayer.Couch
 {
     public class CouchMultiplayerManagerHandler : MonoBehaviour
     {
+        public bool OnEnableSetAllowJoining
+        { 
+            get
+            {
+                return onEnableSetAllowJoining;
+            }
+            set
+            {
+                onEnableSetAllowJoining = value;
+            }
+        }
+        public bool AllowJoining
+        {
+            get
+            {
+                return allowJoining;
+            }
+            set
+            {
+                allowJoining = value;
+            }
+        }
+
+        [SerializeReference] private bool onEnableSetAllowJoining;
         [Tooltip("Allow couch mutliplayer joining in this scene?")]
-        public bool allowJoining = true;
+        [SerializeReference] bool allowJoining = true;
 
         private void OnEnable()
         {
-            CouchMultiplayerManager.PlayersCanJoin = allowJoining;
+            if(onEnableSetAllowJoining)
+            {
+                CouchMultiplayerManager.PlayersCanJoin = allowJoining;
+            }
+        }
+
+        public void ClearPlayers()
+        {
+            if(CouchMultiplayerManager.Instance == null)
+            {
+                Debug.LogWarning("CouchMultiplayerManager Instance is null");
+                return;
+            }
+
+            CouchMultiplayerManager.Instance.ClearPlayers();
         }
     }
 }
