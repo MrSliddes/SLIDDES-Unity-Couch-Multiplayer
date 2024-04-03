@@ -143,6 +143,7 @@ namespace SLIDDES.Multiplayer.Couch
                 onPlayerLeave?.Invoke(playerInput);
             }
             startingLobbyInputDevice = null;
+            ActivePlayerInput = null;
             joinedPlayers.Clear();
             onJoinedPlayersChanged?.Invoke(joinedPlayers.ToArray());
             onLobbyClear?.Invoke();
