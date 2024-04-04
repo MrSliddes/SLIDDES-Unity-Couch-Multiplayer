@@ -49,6 +49,10 @@ namespace SLIDDES.Multiplayer.Couch
         [Tooltip("When the spawner is done spawning players")]
         public UnityEvent onFinishedSpawning;
 
+        public UnityEvent<PlayerInput> onPlayerInputDeviceLost;
+        public UnityEvent<PlayerInput> onPlayerInputDeviceRegained;
+        public UnityEvent<PlayerInput> onPlayerInputControlsChanged;
+
         /// <summary>
         /// Keeps track of on what spawn point to spawn the next player
         /// </summary>
@@ -178,10 +182,14 @@ namespace SLIDDES.Multiplayer.Couch
                 Debug.LogError($"{debugPrefix} prefabPlayer has not been set in the inspector of couchMultiplayerPlayerSpawner! Make sure to set the prefabPlayer reference");
                 return;
             }
-            Transform spawn = GetPlayerSpawnTransform();
-            //GameObject a = Instantiate(prefabPlayer, spawn.position, spawn.rotation);            
-            PlayerInput playerInput = PlayerInput.Instantiate(prefabPlayer, playerData.playerIndex, "", -1, pairWithDevice: playerData.inputDevice);
+
+            PlayerInput playerInput = PlayerInput.Instantiate(prefab: prefabPlayer, playerIndex: playerData.playerIndex, pairWithDevice: playerData.inputDevice);
+            playerInput.onDeviceLost += x => onPlayerInputDeviceLost?.Invoke(x);
+            playerInput.onDeviceRegained += x => onPlayerInputDeviceRegained?.Invoke(x);
+            playerInput.onControlsChanged += x => onPlayerInputControlsChanged?.Invoke(x);
+
             GameObject a = playerInput.gameObject;
+            Transform spawn = GetPlayerSpawnTransform();           
             a.transform.SetParent(spawn, false);
 
             // Get / create cmp
