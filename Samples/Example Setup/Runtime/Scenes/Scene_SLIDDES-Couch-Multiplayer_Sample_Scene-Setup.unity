@@ -156,7 +156,7 @@ Transform:
   m_Children:
   - {fileID: 1104327478}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &243539267
 MonoBehaviour:
@@ -173,7 +173,7 @@ MonoBehaviour:
   components:
     prefabPlayerCanvas: {fileID: 4157851745412560160, guid: a864446a26549c040b2b3facff9f723f, type: 3}
     parentCanvases: {fileID: 243539266}
-    playerSpawner: {fileID: 966736376}
+    playerSpawner: {fileID: 0}
 --- !u!114 &243539268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,24 +349,16 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   excludedDeviceNames: []
   playersCanJoin: 1
-  joinAction:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Join
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 143d44df-7f11-45bd-8beb-0f95feb1cf2d
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 1120369429361536294, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  joinActions: []
   maxPlayers: 8
   maxDisplays: 1
   singlePlayerInputSwitch: 1
   showDebug: 1
   debugDeviceNameOnAdd: 0
   onAddPlayer:
+    m_PersistentCalls:
+      m_Calls: []
+  onRemovePlayer:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &546513772
@@ -382,19 +374,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &966736376 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8588594722187778805, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-  m_PrefabInstance: {fileID: 8588594721223549709}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30b045c3de2eb924aac0f699bb46b3e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1104327478 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4157851745412560164, guid: a864446a26549c040b2b3facff9f723f, type: 3}
@@ -546,7 +527,7 @@ Transform:
   - {fileID: 393833054}
   - {fileID: 1385508254}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4157851746516796946
 PrefabInstance:
@@ -645,117 +626,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a864446a26549c040b2b3facff9f723f, type: 3}
---- !u!1001 &6742932953698165510
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108827, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6742932953245108829, guid: 95bfe78305168b246b238bef11df9896, type: 3}
-      propertyPath: m_Name
-      value: Couch Multiplayer Player
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 95bfe78305168b246b238bef11df9896, type: 3}
---- !u!1001 &8588594721223549709
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778804, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588594722187778810, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}
-      propertyPath: m_Name
-      value: Couch Multiplayer Player Spawner
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8e17801f26a05704a9906eabab1d79e3, type: 3}

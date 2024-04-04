@@ -155,9 +155,10 @@ MonoBehaviour:
   removePlayersOnAwake: 1
   clearPlayerDataOnStart: 1
   spawnOnStart: 1
+  orderSpawningOnLobbyID: 0
   playersToSpawnOnInitialized: 0
   enableSplitScreen: 0
-  showDebug: 0
+  showDebug: 1
   prefabPlayer: {fileID: 6573013464980273091, guid: 8f9550fedc6ad834e8354d07ef850dc2, type: 3}
   parentTransformPlayers: {fileID: 0}
   playerSpawnPositions: []
@@ -165,6 +166,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onFinishedSpawning:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerInputDeviceLost:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerInputDeviceRegained:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerInputControlsChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &138984871
@@ -414,24 +424,27 @@ MonoBehaviour:
   excludedDeviceNames:
   - Mouse
   playersCanJoin: 1
-  joinAction:
-    m_UseReference: 0
+  joinActions:
+  - m_UseReference: 1
     m_Action:
-      m_Name: Join
+      m_Name: Element 0
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: cae4b4ea-2d76-450c-9e8a-3742735e52da
+      m_Id: 54ec8c75-c514-4fce-a274-b3a37c664593
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 0}
+    m_Reference: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   maxPlayers: 8
   maxDisplays: 1
   singlePlayerInputSwitch: 1
   showDebug: 1
   debugDeviceNameOnAdd: 0
   onAddPlayer:
+    m_PersistentCalls:
+      m_Calls: []
+  onRemovePlayer:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &1229777525
@@ -480,6 +493,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soloPlayerInput: 0
   canStartLobby: 1
+  minimumPlayersRequired: 1
+  startingMode: 0
+  startingTime: 0
+  assignLobbyIDsOnStart: 1
   showDebug: 1
   inputCallbacks:
   - inputActionName: Navigate
@@ -493,6 +510,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onPlayerLeave:
+    m_PersistentCalls:
+      m_Calls: []
+  onLobbyStarting:
+    m_PersistentCalls:
+      m_Calls: []
+  onLobbyStartingTimer:
+    m_PersistentCalls:
+      m_Calls: []
+  onLobbyCancelStarting:
     m_PersistentCalls:
       m_Calls: []
   onLobbyStart:

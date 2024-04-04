@@ -69,6 +69,7 @@ namespace SLIDDES.Multiplayer.Couch
         /// A list containing all of the active players
         /// </summary>
         private Dictionary<PlayerData, CouchMultiplayerPlayerBase> players = new Dictionary<PlayerData, CouchMultiplayerPlayerBase>();
+        private Dictionary<PlayerInput, bool> playersDeviceStatus = new Dictionary<PlayerInput, bool>();
         private Coroutine coroutineSpawnAllPlayers;
 
         private void Awake()
@@ -130,6 +131,10 @@ namespace SLIDDES.Multiplayer.Couch
             if(spawnOnStart) SpawnAllPlayers();
         }
 
+        private void Update()
+        {
+            CheckPlayersDeviceStatus();
+        }
 
         /// <summary>
         /// Clears all present player gameobjects in the scene
@@ -143,6 +148,7 @@ namespace SLIDDES.Multiplayer.Couch
             }
 
             players.Clear();
+            playersDeviceStatus.Clear();
         }
 
         /// <summary>
@@ -187,6 +193,8 @@ namespace SLIDDES.Multiplayer.Couch
             playerInput.onDeviceLost += x => onPlayerInputDeviceLost?.Invoke(x);
             playerInput.onDeviceRegained += x => onPlayerInputDeviceRegained?.Invoke(x);
             playerInput.onControlsChanged += x => onPlayerInputControlsChanged?.Invoke(x);
+
+            playersDeviceStatus.Add(playerInput, playerData.inputDevice != null);
 
             GameObject a = playerInput.gameObject;
             Transform spawn = GetPlayerSpawnTransform();           
@@ -267,6 +275,30 @@ namespace SLIDDES.Multiplayer.Couch
             yield return null;
             onFinishedSpawning?.Invoke();
             yield break;
+        }
+
+        private void CheckPlayersDeviceStatus()
+        {
+            var playerDevices = playersDeviceStatus.ToArray();
+
+            for(int i = 0; i < playerDevices.Length; i++)
+            {
+                var item = playerDevices[i];
+                if(item.Key.devices.Count <= 0 && item.Value)
+                {
+                    if(showDebug) Debug.Log($"{debugPrefix} Device lost of player {item.Key.playerIndex}");
+
+                    playersDeviceStatus[item.Key] = false;
+                    onPlayerInputDeviceLost?.Invoke(item.Key);
+                }
+                else if(item.Key.devices.Count > 0 && !item.Value)
+                {
+                    if(showDebug) Debug.Log($"{debugPrefix} Device regained of player {item.Key.playerIndex}");
+
+                    playersDeviceStatus[item.Key] = true;
+                    onPlayerInputDeviceRegained?.Invoke(item.Key);
+                }
+            }
         }
     }
 }
