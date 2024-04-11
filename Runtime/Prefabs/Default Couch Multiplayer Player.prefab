@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 4411975442190934686}
   - component: {fileID: 572762932234329608}
   - component: {fileID: 8398804540886659610}
+  - component: {fileID: 993625593125215345}
   m_Layer: 0
-  m_Name: Default Player
+  m_Name: Default Couch Multiplayer Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,4 +205,20 @@ MonoBehaviour:
   allowJoining: 1
   allowLeaving: 1
   allowInputSending: 1
+  allowStarting: 1
   playerInput: {fileID: 8124854458550109665}
+--- !u!114 &993625593125215345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6573013464980273091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a7f8a770e08fb4dacbe9d9772cb086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInitialized:
+    m_PersistentCalls:
+      m_Calls: []

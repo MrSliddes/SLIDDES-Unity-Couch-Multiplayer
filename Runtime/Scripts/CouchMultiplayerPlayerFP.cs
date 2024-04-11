@@ -23,19 +23,19 @@ namespace SLIDDES.Multiplayer.Couch
         {
             base.RefreshCamera();
 
-            camera.rect = playerData.cameraViewPortRect;
-            camera.targetDisplay = playerData.cameraTargetDisplay;
-            cameraOverlay.rect = camera.rect;
-            cameraOverlay.targetDisplay = camera.targetDisplay;
+            GetComponent<Camera>().rect = PlayerData.cameraViewPortRect;
+            GetComponent<Camera>().targetDisplay = PlayerData.cameraTargetDisplay;
+            cameraOverlay.rect = GetComponent<Camera>().rect;
+            cameraOverlay.targetDisplay = GetComponent<Camera>().targetDisplay;
 
             // Set camera cullingMask, by turning bit off
             int[] includedLayers = layerMaskCamera.IncludedLayers();
-            int cameraLayer = includedLayers[playerData.playerIndex];
-            camera.cullingMask &= ~(1 << cameraLayer); // turn off bit
+            int cameraLayer = includedLayers[PlayerData.playerIndex];
+            GetComponent<Camera>().cullingMask &= ~(1 << cameraLayer); // turn off bit
 
             // Set camera overlay layer, by turning bit on
             int[] includedOverlayLayers = layerMaskCameraOverlay.IncludedLayers();
-            int cameraOverlayLayer = includedOverlayLayers[playerData.playerIndex];
+            int cameraOverlayLayer = includedOverlayLayers[PlayerData.playerIndex];
             cameraOverlay.cullingMask |= 1 << cameraOverlayLayer; // turn on bit
 
             // First person gameobjects

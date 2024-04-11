@@ -9,12 +9,15 @@ using UnityEngine.InputSystem.UI;
 
 namespace SLIDDES.Multiplayer.Couch
 {
-    [AddComponentMenu("SLIDDES/Multiplayer/Couch/Canvas Manager")]
-    [RequireComponent(typeof(EventSystem))]
-    [RequireComponent(typeof(InputSystemUIInputModule))]
+    [AddComponentMenu("SLIDDES/Multiplayer/Couch/Couch Multiplayer Canvas Manager")]
     public class CouchMultiplayerCanvasManager : MonoBehaviour
     {
-        public Components components;
+        [Tooltip("The player canvas prefab")]
+        [SerializeField] private GameObject prefabPlayerCanvas;
+        [Tooltip("The parent transform of all canvases")]
+        [SerializeField] private Transform parentCanvases;
+        [Tooltip("Reference to the player spawner")]
+        [SerializeField] private CouchMultiplayerPlayerSpawner playerSpawner;
 
         /// <summary>
         /// Action that gets triggerd when a player gets added
@@ -27,21 +30,21 @@ namespace SLIDDES.Multiplayer.Couch
 
         private void OnEnable()
         {
-            if(components.playerSpawner == null)
+            if(playerSpawner == null)
             {
                 throw new NullReferenceException("PlayerSpawner not assigned!");
             }
-            if(components.parentCanvases == null) components.parentCanvases = transform;
+            if(parentCanvases == null) parentCanvases = transform;
 
             actionOnAddPlayer = x => GeneratePlayerCanvases();
-            components.playerSpawner.onPlayerInstantiate.AddListener(actionOnAddPlayer);
+            playerSpawner.onPlayerInstantiate.AddListener(actionOnAddPlayer);
 
             GeneratePlayerCanvases();
         }
 
         private void OnDisable()
         {
-            components.playerSpawner.onPlayerInstantiate.RemoveListener(actionOnAddPlayer);
+            playerSpawner.onPlayerInstantiate.RemoveListener(actionOnAddPlayer);
         }
 
         /// <summary>
@@ -51,33 +54,24 @@ namespace SLIDDES.Multiplayer.Couch
         {
             // Clear old canvases
             playerCanvases.Clear();
-            foreach(Transform child in components.parentCanvases.transform)
+            foreach(Transform child in parentCanvases.transform)
             {
                 Destroy(child.gameObject);
             }
 
             // Create a canvas for each player
-            foreach(var item in components.playerSpawner.Players)
+            CouchMultiplayerPlayer[] players = playerSpawner.Players;
+            for(int i = 0; i < players.Length; i++)
             {
-                CouchMultiplayerPlayer player = (CouchMultiplayerPlayer)item;
+                CouchMultiplayerPlayer player = players[i];
                 if(player == null) continue;
 
-                GameObject a = Instantiate(components.prefabPlayerCanvas, components.parentCanvases);
+                GameObject a = Instantiate(prefabPlayerCanvas, parentCanvases);
                 CouchMultiplayerPlayerCanvas canvas = a.GetComponent<CouchMultiplayerPlayerCanvas>();
                 canvas.Initialize(player);
                 playerCanvases.Add(canvas);
+                player.MultiplayerEventSystem.playerRoot = a;
             }
-        }
-
-        [System.Serializable]
-        public class Components
-        {
-            [Tooltip("The player canvas prefab")]
-            public GameObject prefabPlayerCanvas;
-            [Tooltip("The parent transform of all canvases")]
-            public Transform parentCanvases;
-            [Tooltip("Reference to the player spawner")]
-            public CouchMultiplayerPlayerSpawner playerSpawner;
         }
     }
 }

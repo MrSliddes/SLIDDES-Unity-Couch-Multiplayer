@@ -16,7 +16,7 @@ namespace SLIDDES.Multiplayer.Couch
         /// <summary>
         /// Contains all of the active players
         /// </summary>
-        public CouchMultiplayerPlayerBase[] Players => players.Values.ToArray();
+        public CouchMultiplayerPlayer[] Players => players.Values.ToArray();
 
         [Header("Values")]
         [Tooltip("Remove players that are already present in the scene for cleanup before spawning players")]
@@ -68,7 +68,7 @@ namespace SLIDDES.Multiplayer.Couch
         /// <summary>
         /// A list containing all of the active players
         /// </summary>
-        private Dictionary<PlayerData, CouchMultiplayerPlayerBase> players = new Dictionary<PlayerData, CouchMultiplayerPlayerBase>();
+        private Dictionary<PlayerData, CouchMultiplayerPlayer> players = new Dictionary<PlayerData, CouchMultiplayerPlayer>();
         private Dictionary<PlayerInput, bool> playersDeviceStatus = new Dictionary<PlayerInput, bool>();
         private Coroutine coroutineSpawnAllPlayers;
 
@@ -141,8 +141,8 @@ namespace SLIDDES.Multiplayer.Couch
         /// </summary>
         public void ClearPlayersInScene()
         {
-            CouchMultiplayerPlayerBase[] foundPlayers = FindObjectsOfType<CouchMultiplayerPlayerBase>();
-            foreach(CouchMultiplayerPlayerBase player in foundPlayers)
+            CouchMultiplayerPlayer[] foundPlayers = FindObjectsOfType<CouchMultiplayerPlayer>();
+            foreach(CouchMultiplayerPlayer player in foundPlayers)
             {
                 if(player.gameObject != null) Destroy(player.gameObject);
             }
@@ -201,20 +201,20 @@ namespace SLIDDES.Multiplayer.Couch
             a.transform.SetParent(spawn, false);
 
             // Get / create cmp
-            CouchMultiplayerPlayerBase cmpb = a.GetComponent<CouchMultiplayerPlayerBase>();
-            if(cmpb == null) cmpb = a.GetComponentInChildren<CouchMultiplayerPlayerBase>();
-            if(cmpb == null)
+            CouchMultiplayerPlayer cmp = a.GetComponent<CouchMultiplayerPlayer>();
+            if(cmp == null) cmp = a.GetComponentInChildren<CouchMultiplayerPlayer>();
+            if(cmp == null)
             {
                 // No cmp component on player, add cmp component
-                cmpb = a.AddComponent<CouchMultiplayerPlayerBase>();
+                cmp = a.AddComponent<CouchMultiplayerPlayer>();
                 if(showDebug) Debug.Log($"{debugPrefix} No CouchMultiplayerBase component found on player prefab! Adding component...");
             }
             
             // Initialize CouchMultiplayerPlayer
-            cmpb.Initialize(playerData);
+            cmp.Initialize(playerData);
 
             // Add to players
-            players.Add(playerData, cmpb);
+            players.Add(playerData, cmp);
 
             // Refresh cameras
             if(enableSplitScreen)
@@ -225,8 +225,8 @@ namespace SLIDDES.Multiplayer.Couch
                 int pIndex = 0;
                 foreach(var player in players) // ductape solution but works
                 {
-                    player.Value.playerData.cameraTargetDisplay = playerDisplays[pIndex].cameraTargetDisplay;
-                    player.Value.playerData.cameraViewPortRect = playerDisplays[pIndex].cameraViewPortRect;
+                    player.Value.PlayerData.cameraTargetDisplay = playerDisplays[pIndex].cameraTargetDisplay;
+                    player.Value.PlayerData.cameraViewPortRect = playerDisplays[pIndex].cameraViewPortRect;
                     player.Value.RefreshCamera();
                     pIndex++;
                 }
