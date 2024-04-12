@@ -17,9 +17,21 @@ namespace SLIDDES.Multiplayer.Couch
     {
         public PlayerData PlayerData { get; private set; }
         public Camera Camera { get; private set; }
-        public Camera CameraUI { get; private set; }
+        public Camera CameraUI
+        {
+            get
+            {
+                return cameraUI;
+            }
+            set
+            {
+                cameraUI = value;
+            }
+        }
         public PlayerInput PlayerInput { get; private set; }
         public MultiplayerEventSystem MultiplayerEventSystem { get; private set; }
+
+        [SerializeField] private Camera cameraUI;
 
         public UnityEvent onInitialized;
 
