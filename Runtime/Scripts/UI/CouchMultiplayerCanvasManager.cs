@@ -12,6 +12,10 @@ namespace SLIDDES.Multiplayer.Couch
     [AddComponentMenu("SLIDDES/Multiplayer/Couch/Couch Multiplayer Canvas Manager")]
     public class CouchMultiplayerCanvasManager : MonoBehaviour
     {
+        [SerializeField] private bool setMultiplayerEventSystemPlayerRoot = true;
+        [Tooltip("When using this, dont forget to set enableSplitscreen in player spawner!")]
+        [SerializeField] private bool initializeCMViewportRects;
+
         [Tooltip("The player canvas prefab")]
         [SerializeField] private GameObject prefabPlayerCanvas;
         [Tooltip("The parent transform of all canvases")]
@@ -70,7 +74,23 @@ namespace SLIDDES.Multiplayer.Couch
                 CouchMultiplayerPlayerCanvas canvas = a.GetComponent<CouchMultiplayerPlayerCanvas>();
                 canvas.Initialize(player);
                 playerCanvases.Add(canvas);
-                player.MultiplayerEventSystem.playerRoot = a;
+
+                if(setMultiplayerEventSystemPlayerRoot)
+                {
+                    player.MultiplayerEventSystem.playerRoot = a;
+                }
+
+                if(initializeCMViewportRects)
+                {
+                    CouchMultiplayerCanvasViewportRect cmcViewportRect = a.GetComponentInChildren<CouchMultiplayerCanvasViewportRect>();
+                    if(cmcViewportRect == null)
+                    {
+                        Debug.LogWarning("Tried initializing CouchMultiplayerCanvasViewportRect component but none was found. Did you forgot to add it?");
+                        continue;
+                    }
+
+                    cmcViewportRect.Initialize(canvas, player.PlayerData);
+                }
             }
         }
     }

@@ -30,7 +30,9 @@ namespace SLIDDES.Multiplayer.Couch
         [SerializeField] private int playersToSpawnOnInitialized;
 
         [Header("Split-Screen")]
+        [Tooltip("Enable splitscreen for the players. Also set this to true if using CouchMultiplayerCanvasViewportRect")]
         [SerializeField] private bool enableSplitScreen;
+        [SerializeField] private SplitScreenMode splitScreenMode = SplitScreenMode.Horizontal;
 
         [Header("Debug")]
         [Tooltip("Show debug messages from this script")]
@@ -220,13 +222,14 @@ namespace SLIDDES.Multiplayer.Couch
             if(enableSplitScreen)
             {
                 // Get display data for each player
-                PlayerData[] playerDisplays = Display.GetPlayerDisplays(CouchMultiplayerManager.MaxDisplays, CouchMultiplayerManager.PlayerAmount);
+                PlayerData[] playerDisplays = Display.GetPlayerDisplays(CouchMultiplayerManager.MaxDisplays, CouchMultiplayerManager.PlayerAmount, splitScreenMode);
                 
                 int pIndex = 0;
                 foreach(var player in players) // ductape solution but works
                 {
                     player.Value.PlayerData.cameraTargetDisplay = playerDisplays[pIndex].cameraTargetDisplay;
                     player.Value.PlayerData.cameraViewPortRect = playerDisplays[pIndex].cameraViewPortRect;
+                    player.Value.PlayerData.splitScreenMode = splitScreenMode;
                     player.Value.RefreshCamera();
                     pIndex++;
                 }

@@ -19,7 +19,9 @@ namespace SLIDDES.Multiplayer.Couch
         [Tooltip("The index number of the display")]
         public int cameraTargetDisplay = -1;
         [Tooltip("The viewport rect of the camera")]
-        public Rect cameraViewPortRect = new Rect(-1, -1, -1, -1);       
+        public Rect cameraViewPortRect = new Rect(-1, -1, -1, -1);
+        [Tooltip("The mode of the splitscreen")]
+        public SplitScreenMode splitScreenMode;
 
         /// <summary>
         /// The corresponding input device of this player
