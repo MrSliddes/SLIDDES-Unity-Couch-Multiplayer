@@ -41,6 +41,8 @@ namespace SLIDDES.Multiplayer.Couch
         [Header("Components")]
         [Tooltip("The prefab of the player to be spawned")]
         [SerializeField] private GameObject prefabPlayer;
+        [Tooltip("When the prefab of the player spawns, look for an rigidbody component and set the correct position of that component")]
+        [SerializeField] private bool onSpawnSetPrefabRBPosition = true;
         [Tooltip("The parent transform where all instantiated players will be parented under. If left null this gameObject transform will be assigned as parent")]
         [SerializeField] private Transform parentTransformPlayers;
         [Tooltip("The spawn points for each player. If the amount of players exceeds the amount of spawn points the players will spawn at the last spawn point index")]
@@ -201,6 +203,16 @@ namespace SLIDDES.Multiplayer.Couch
             GameObject a = playerInput.gameObject;
             Transform spawn = GetPlayerSpawnTransform();           
             a.transform.SetParent(spawn, false);
+
+            if(onSpawnSetPrefabRBPosition)
+            {
+                Rigidbody rb = a.GetComponent<Rigidbody>();
+                if(rb == null) rb = a.GetComponentInChildren<Rigidbody>();
+                if(rb != null)
+                {
+                    rb.position = spawn.position;
+                }
+            }
 
             // Get / create cmp
             CouchMultiplayerPlayer cmp = a.GetComponent<CouchMultiplayerPlayer>();
