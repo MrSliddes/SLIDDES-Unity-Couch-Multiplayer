@@ -12,9 +12,7 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [
-        "SLIDDES_Couch_Multiplayer"
-    ],
+    "defineConstraints": [],
     "versionDefines": [
         {
             "name": "com.sliddes.ui",
