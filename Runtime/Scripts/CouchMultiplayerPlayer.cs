@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
-using UnityEngine.InputSystem.Users;
 
 namespace SLIDDES.Multiplayer.Couch
 {
@@ -13,6 +12,8 @@ namespace SLIDDES.Multiplayer.Couch
     /// </summary>
     [AddComponentMenu("SLIDDES/Multiplayer/Couch/Couch Multiplayer Player")]
     [RequireComponent(typeof(PlayerInput))]
+    [RequireComponent(typeof(MultiplayerEventSystem))]
+    [RequireComponent(typeof(InputSystemUIInputModule))]
     public class CouchMultiplayerPlayer : MonoBehaviour
     {
         public PlayerData PlayerData { get; private set; }
@@ -31,9 +32,35 @@ namespace SLIDDES.Multiplayer.Couch
         public PlayerInput PlayerInput { get; private set; }
         public MultiplayerEventSystem MultiplayerEventSystem { get; private set; }
 
+        public UnityAction onInitialized;
+
+        [Tooltip("Reference to the player camera that holds the UI. (Optional)")]
         [SerializeField] private Camera cameraUI;
 
-        public UnityEvent onInitialized;
+        // First person
+        [Tooltip("Overlay camera of the player (think of a camera that renders the player weapon for example")]
+        [SerializeField] private Camera cameraOverlay;
+        [SerializeField] private LayerMask layerMaskCamera;
+        [SerializeField] private LayerMask layerMaskCameraOverlay;
+        [SerializeField] private GameObjectItem[] firstPersonGameObjects;
+        [SerializeField] private GameObjectItem[] thirdPersonGameObjects;
+
+        // Lobby
+        [SerializeField] private bool canJoinLobby = true;
+        [SerializeField] private bool canLeaveLobby = true;
+        [SerializeField] private bool canStartLobby = true;
+        [SerializeField] private bool canSendInputToLobby = true;
+
+        private void Awake()
+        {
+            PlayerInput = GetComponentInChildren<PlayerInput>();
+            if(PlayerInput == null)
+            {
+                Debug.LogError($"{DebugPrefix()} playerInput is not assigned. Please assign the component reference");
+            }
+
+            MultiplayerEventSystem = GetComponentInChildren<MultiplayerEventSystem>();
+        }
 
         /// <summary>
         /// Initialize the player with the playerData
@@ -44,32 +71,10 @@ namespace SLIDDES.Multiplayer.Couch
         {
             PlayerData = playerData;
 
-            if(PlayerInput == null)
-            {
-                PlayerInput = GetComponent<PlayerInput>();
-                if(PlayerInput == null)
-                {
-                    GetComponentInChildren<PlayerInput>();
-                    if(PlayerInput == null)
-                    {
-                        Debug.LogError($"{DebugPrefix()} playerInput is not assigned. Please assign the component reference");
-                    }
-                }
-            }
-
-            if(MultiplayerEventSystem == null)
-            {
-                MultiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
-                if(MultiplayerEventSystem == null)
-                {
-                    MultiplayerEventSystem = GetComponentInChildren<MultiplayerEventSystem>();                    
-                }
-            }
-
             // Set auto switch
-            if(CouchMultiplayerManager.MaxPlayers == 1)
+            if(CouchMultiplayerSettings.MaxDevices == 1)
             {
-                PlayerInput.neverAutoSwitchControlSchemes = !CouchMultiplayerManager.SinglePlayerInputSwitch;
+                PlayerInput.neverAutoSwitchControlSchemes = !CouchMultiplayerSettings.AllowSinglePlayerDeviceSwitch;
             }
             else PlayerInput.neverAutoSwitchControlSchemes = true;
 
@@ -88,14 +93,104 @@ namespace SLIDDES.Multiplayer.Couch
 
         }
 
-        public virtual string DebugPrefix() => "[CouchMultiplayerBase]";
+        public virtual string DebugPrefix() => "[CouchMultiplayerPlayer]";
 
         /// <summary>
         /// Refreshes the camera with playerData camera values
         /// </summary>
         public virtual void RefreshCamera()
         {
+            // First person
+            if(cameraOverlay != null)
+            {
+                GetComponent<Camera>().rect = PlayerData.cameraViewPortRect;
+                GetComponent<Camera>().targetDisplay = PlayerData.cameraTargetDisplay;
+                cameraOverlay.rect = GetComponent<Camera>().rect;
+                cameraOverlay.targetDisplay = GetComponent<Camera>().targetDisplay;
 
+                // Set camera cullingMask, by turning bit off
+                int[] includedLayers = layerMaskCamera.IncludedLayers();
+                int cameraLayer = includedLayers[PlayerData.playerIndex];
+                GetComponent<Camera>().cullingMask &= ~(1 << cameraLayer); // turn off bit
+
+                // Set camera overlay layer, by turning bit on
+                int[] includedOverlayLayers = layerMaskCameraOverlay.IncludedLayers();
+                int cameraOverlayLayer = includedOverlayLayers[PlayerData.playerIndex];
+                cameraOverlay.cullingMask |= 1 << cameraOverlayLayer; // turn on bit
+
+                // First person gameobjects
+                foreach(var item in firstPersonGameObjects)
+                {
+                    if(item.setLayerRecursively) item.item.transform.SetLayerRecursively(cameraOverlayLayer); else item.item.layer = cameraOverlayLayer;
+                }
+
+                // Third person gameobjects
+                foreach(var item in thirdPersonGameObjects)
+                {
+                    if(item.setLayerRecursively) item.item.transform.SetLayerRecursively(cameraLayer); else item.item.layer = cameraLayer;
+                }
+            }
+        }
+
+        #region Lobby
+
+        public void JoinLobby(InputAction.CallbackContext context)
+        {
+            if(!canJoinLobby) return;
+
+            if(context.canceled && CouchMultiplayerLobby.ActiveLobby != null)
+            {
+                CouchMultiplayerLobby.ActiveLobby.AddPlayer(PlayerInput);
+            }
+        }
+
+        public void LeaveLobby(InputAction.CallbackContext context)
+        {
+            if(!canLeaveLobby) return;
+
+            if(context.canceled && CouchMultiplayerLobby.ActiveLobby != null)
+            {
+                CouchMultiplayerLobby.ActiveLobby.RemovePlayer(PlayerInput);
+            }
+        }
+
+        public void StartingLobby(InputAction.CallbackContext context)
+        {
+            if(!canStartLobby) return;
+
+            if(context.canceled && CouchMultiplayerLobby.ActiveLobby != null)
+            {
+                CouchMultiplayerLobby.ActiveLobby.StartingLobby(context);
+            }
+        }
+
+        public void StartLobby(InputAction.CallbackContext context)
+        {
+            if(!canStartLobby) return;
+
+            if(context.canceled && CouchMultiplayerLobby.ActiveLobby != null)
+            {
+                CouchMultiplayerLobby.ActiveLobby.StartLobby();
+            }
+        }
+
+        public void SendInputToLobby(InputAction.CallbackContext context)
+        {
+            if(canSendInputToLobby) return;
+
+            if(context.canceled && CouchMultiplayerLobby.ActiveLobby != null)
+            {
+                CouchMultiplayerLobby.ActiveLobby.ReceiveInputFromPlayer(PlayerInput, context);
+            }
+        }
+
+        #endregion
+
+        [System.Serializable]
+        public class GameObjectItem
+        {
+            public GameObject item;
+            public bool setLayerRecursively;
         }
     }
 }

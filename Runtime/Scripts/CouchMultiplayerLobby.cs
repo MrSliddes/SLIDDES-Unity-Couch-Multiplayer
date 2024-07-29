@@ -6,9 +6,10 @@ using UnityEngine.InputSystem;
 
 namespace SLIDDES.Multiplayer.Couch
 {
-    public class CouchMultiplayerPlayerLobby : MonoBehaviour
+    public class CouchMultiplayerLobby : MonoBehaviour
     {
-        public static CouchMultiplayerPlayerLobby ActiveLobby;
+        public static CouchMultiplayerLobby ActiveLobby { get; private set; }
+
         public bool CanStartLobby
         {
             get
@@ -21,7 +22,7 @@ namespace SLIDDES.Multiplayer.Couch
             }
         }
         public bool IsStartingLobby
-        { 
+        {
             get
             {
                 return isStartingLobby;
@@ -41,13 +42,13 @@ namespace SLIDDES.Multiplayer.Couch
 
         public PlayerInput[] JoinedPlayers => joinedPlayers.ToArray();
 
-        [SerializeField] private bool soloPlayerInput;
+        [SerializeField] private bool oneAtATimePlayerInput;
         [SerializeField] private bool canStartLobby = true;
         [SerializeField] private int minimumPlayersRequired = 1;
         [Space]
         [SerializeField] private StartingMode startingMode;
         [SerializeField] private float startingTime = 0;
-        [SerializeField] private bool assignLobbyIDsOnStart = true;
+        [SerializeField] private bool assignLobbyIDOnLobbyStart = true;
         [Space]
         [SerializeField] private bool showDebug;
         [SerializeField] private InputCallback[] inputCallbacks;
@@ -93,8 +94,14 @@ namespace SLIDDES.Multiplayer.Couch
             }
         }
 
-        public void JoinLobby(PlayerInput playerInput)
+        public void AddPlayer(PlayerInput playerInput)
         {
+            if(playerInput == null)
+            {
+                Debug.LogError($"{debugPrefix} AddPlayer playerInput is null");
+                return;
+            }
+
             if(isStartingLobby) return;
 
             // Check if player isnt already in
@@ -104,18 +111,19 @@ namespace SLIDDES.Multiplayer.Couch
                 return;
             }
 
-            if(soloPlayerInput && activePlayerInput == null)
+            if(oneAtATimePlayerInput && activePlayerInput == null)
             {
                 ActivePlayerInput = playerInput;
             }
 
             if(showDebug) Debug.Log($"{debugPrefix} Player {playerInput.playerIndex} joined lobby");
+
             joinedPlayers.Add(playerInput);
             onPlayerJoined?.Invoke(playerInput);
             onJoinedPlayersChanged?.Invoke(joinedPlayers.ToArray());
         }
 
-        public void LeaveLobby(PlayerInput playerInput) 
+        public void RemovePlayer(PlayerInput playerInput)
         {
             if(isStartingLobby) return;
 
@@ -125,40 +133,16 @@ namespace SLIDDES.Multiplayer.Couch
                 return;
             }
 
-            if(soloPlayerInput && ActivePlayerInput == playerInput)
+            if(oneAtATimePlayerInput && ActivePlayerInput == playerInput)
             {
                 ActivePlayerInput = null;
             }
 
             if(showDebug) Debug.Log($"{debugPrefix} Player {playerInput.playerIndex} leaved lobby");
+
             joinedPlayers.Remove(playerInput);
             onPlayerLeave?.Invoke(playerInput);
             onJoinedPlayersChanged?.Invoke(joinedPlayers.ToArray());
-        }
-
-        public void ClearLobby()
-        {
-            foreach(PlayerInput playerInput in joinedPlayers)
-            {
-                onPlayerLeave?.Invoke(playerInput);
-            }
-            startingLobbyInputDevice = null;
-            ActivePlayerInput = null;
-            joinedPlayers.Clear();
-            onJoinedPlayersChanged?.Invoke(joinedPlayers.ToArray());
-            onLobbyClear?.Invoke();
-        }
-
-        public void AssignLobbyIDsToPlayers()
-        {
-            for(int i = 0; i < joinedPlayers.Count; i++)
-            {
-                PlayerData playerData = CouchMultiplayerManager.Instance.GetPlayerData(joinedPlayers[i]);
-                if(playerData != null)
-                {
-                    playerData.lobbyIndex = i;
-                }
-            }
         }
 
         public void StartingLobby(InputAction.CallbackContext context)
@@ -220,24 +204,53 @@ namespace SLIDDES.Multiplayer.Couch
         {
             if(!CanStartLobby) return;
 
-            if(assignLobbyIDsOnStart) AssignLobbyIDsToPlayers();
+            if(assignLobbyIDOnLobbyStart) AssignLobbyIDsToPlayers();
 
             onLobbyStart?.Invoke();
         }
 
-        public void ReceiveInput(InputAction.CallbackContext context, PlayerInput playerInput)
+        public void ReceiveInputFromPlayer(PlayerInput playerInput, InputAction.CallbackContext context)
         {
             if(!joinedPlayers.Contains(playerInput)) return;
-            if(soloPlayerInput)
+            if(oneAtATimePlayerInput)
             {
                 if(ActivePlayerInput != playerInput) return;
             }
 
             string key = context.action.name;
+
             if(showDebug) Debug.Log($"{debugPrefix} Receive Input: {key}");
 
             if(!inputCallbacksDictionary.ContainsKey(key)) return;
+
             inputCallbacksDictionary[key].onCallbackContext?.Invoke(context);
+        }
+
+        public void ClearLobby()
+        {
+            foreach(PlayerInput playerInput in joinedPlayers)
+            {
+                onPlayerLeave?.Invoke(playerInput);
+            }
+
+            startingLobbyInputDevice = null;
+            ActivePlayerInput = null;
+            joinedPlayers.Clear();
+
+            onJoinedPlayersChanged?.Invoke(joinedPlayers.ToArray());
+            onLobbyClear?.Invoke();
+        }
+
+        public void AssignLobbyIDsToPlayers()
+        {
+            for(int i = 0; i < joinedPlayers.Count; i++)
+            {
+                PlayerData playerData = CouchMultiplayerManager.Instance.GetPlayerData(joinedPlayers[i]);
+                if(playerData != null)
+                {
+                    playerData.lobbyIndex = i;
+                }
+            }
         }
 
         public void NextActivePlayerInput(bool loopAround = false)
@@ -250,7 +263,7 @@ namespace SLIDDES.Multiplayer.Couch
             {
                 if(loopAround)
                 {
-                    index = 0;                    
+                    index = 0;
                 }
                 else
                 {
@@ -271,7 +284,7 @@ namespace SLIDDES.Multiplayer.Couch
             {
                 if(loopAround)
                 {
-                    index = joinedPlayers.Count - 1;                    
+                    index = joinedPlayers.Count - 1;
                 }
                 else
                 {
@@ -309,7 +322,7 @@ namespace SLIDDES.Multiplayer.Couch
 
         [System.Serializable]
         public enum StartingMode
-        { 
+        {
             Instant,
             HoldToStart,
             CountDown

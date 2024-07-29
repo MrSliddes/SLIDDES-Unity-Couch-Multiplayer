@@ -18,8 +18,6 @@ namespace SLIDDES.Multiplayer.Couch
 
         [Tooltip("The player canvas prefab")]
         [SerializeField] private GameObject prefabPlayerCanvas;
-        [Tooltip("The parent transform of all canvases")]
-        [SerializeField] private Transform parentCanvases;
         [Tooltip("Reference to the player spawner")]
         [SerializeField] private CouchMultiplayerPlayerSpawner playerSpawner;
 
@@ -38,7 +36,6 @@ namespace SLIDDES.Multiplayer.Couch
             {
                 throw new NullReferenceException("PlayerSpawner not assigned!");
             }
-            if(parentCanvases == null) parentCanvases = transform;
 
             actionOnAddPlayer = x => GeneratePlayerCanvases();
             playerSpawner.onPlayerInstantiate.AddListener(actionOnAddPlayer);
@@ -58,7 +55,7 @@ namespace SLIDDES.Multiplayer.Couch
         {
             // Clear old canvases
             playerCanvases.Clear();
-            foreach(Transform child in parentCanvases.transform)
+            foreach(Transform child in transform)
             {
                 Destroy(child.gameObject);
             }
@@ -70,7 +67,7 @@ namespace SLIDDES.Multiplayer.Couch
                 CouchMultiplayerPlayer player = players[i];
                 if(player == null) continue;
 
-                GameObject a = Instantiate(prefabPlayerCanvas, parentCanvases);
+                GameObject a = Instantiate(prefabPlayerCanvas, transform);
                 CouchMultiplayerPlayerCanvas canvas = a.GetComponent<CouchMultiplayerPlayerCanvas>();
                 canvas.Initialize(player);
                 playerCanvases.Add(canvas);

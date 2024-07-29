@@ -3,7 +3,8 @@
     "rootNamespace": "SLIDDES.Multiplayer.Couch",
     "references": [
         "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:4307f53044263cf4b835bd812fc161a4"
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:4d7cc27440a06394680b969d28021356"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -11,7 +12,15 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
+    "defineConstraints": [
+        "SLIDDES_Couch_Multiplayer"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.sliddes.ui",
+            "expression": "1.13.34",
+            "define": "USING_SLIDDES_UI"
+        }
+    ],
     "noEngineReferences": false
 }

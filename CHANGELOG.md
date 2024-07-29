@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [2.0.0]
+### Changed
+- Simplified systems
+- Merged all player classes into one
+
 ## [1.6.0]
 ### Added
 - CouchMultiplayerCanvasViewportRect.cs for scaling UI to camera rect viewport without using extra camera's

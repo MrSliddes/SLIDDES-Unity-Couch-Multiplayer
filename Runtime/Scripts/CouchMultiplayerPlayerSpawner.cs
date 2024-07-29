@@ -93,7 +93,7 @@ namespace SLIDDES.Multiplayer.Couch
             }
 
             // Attach to couchMultiplayerManager
-            CouchMultiplayerManager.Instance.onAddPlayer.AddListener(actionSpawnPlayer);
+            CouchMultiplayerManager.Instance.onAddPlayer += actionSpawnPlayer;
         }
 
         private void OnDisable()
@@ -101,7 +101,7 @@ namespace SLIDDES.Multiplayer.Couch
             if(CouchMultiplayerManager.Instance != null)
             {
                 // Detach to couchMultiplayerManager
-                CouchMultiplayerManager.Instance.onAddPlayer.RemoveListener(actionSpawnPlayer);
+                CouchMultiplayerManager.Instance.onAddPlayer -= actionSpawnPlayer;
             }
         }
 
@@ -201,7 +201,7 @@ namespace SLIDDES.Multiplayer.Couch
             playersDeviceStatus.Add(playerInput, playerData.inputDevice != null);
 
             GameObject a = playerInput.gameObject;
-            Transform spawn = GetPlayerSpawnTransform();           
+            Transform spawn = GetPlayerSpawnTransform();
             a.transform.SetParent(spawn, false);
 
             if(onSpawnSetPrefabRBPosition)
@@ -223,7 +223,7 @@ namespace SLIDDES.Multiplayer.Couch
                 cmp = a.AddComponent<CouchMultiplayerPlayer>();
                 if(showDebug) Debug.Log($"{debugPrefix} No CouchMultiplayerBase component found on player prefab! Adding component...");
             }
-            
+
             // Initialize CouchMultiplayerPlayer
             cmp.Initialize(playerData);
 
@@ -234,8 +234,8 @@ namespace SLIDDES.Multiplayer.Couch
             if(enableSplitScreen)
             {
                 // Get display data for each player
-                PlayerData[] playerDisplays = Display.GetPlayerDisplays(CouchMultiplayerManager.MaxDisplays, CouchMultiplayerManager.PlayerAmount, splitScreenMode);
-                
+                PlayerData[] playerDisplays = Display.GetPlayerDisplays(CouchMultiplayerSettings.MaxDisplays, CouchMultiplayerManager.PlayerAmount, splitScreenMode);
+
                 int pIndex = 0;
                 foreach(var player in players) // ductape solution but works
                 {
@@ -248,6 +248,14 @@ namespace SLIDDES.Multiplayer.Couch
             }
 
             onPlayerInstantiate?.Invoke(a);
+
+#if USING_SLIDDES_UI
+            if(SLIDDES.UI.InputManager.Instance != null)
+            {
+                SLIDDES.UI.InputManager.Instance.UpdatePlayers();
+            }
+#endif
+
             if(showDebug) Debug.Log($"{debugPrefix} Spawned player with playerIndex {playerData.playerIndex}");
         }
 
@@ -289,6 +297,14 @@ namespace SLIDDES.Multiplayer.Couch
             // Wait for gameobject to be created
             yield return null;
             onFinishedSpawning?.Invoke();
+
+#if USING_SLIDDES_UI
+            if(SLIDDES.UI.InputManager.Instance != null)
+            {
+                SLIDDES.UI.InputManager.Instance.UpdatePlayers();
+            }
+#endif
+
             yield break;
         }
 

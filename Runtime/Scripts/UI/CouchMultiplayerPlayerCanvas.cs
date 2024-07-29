@@ -19,7 +19,7 @@ namespace SLIDDES.Multiplayer.Couch
         private Canvas canvas;
         private CanvasScaler canvasScaler;
 
-        public UnityEvent<GameObject> onInitialized;
+        public UnityAction<GameObject> onInitialized;
 
         private void Awake()
         {
