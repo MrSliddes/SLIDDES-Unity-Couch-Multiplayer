@@ -1,6 +1,6 @@
 {
   "name": "com.sliddes.couch-multiplayer",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "displayName": "SLIDDES Couch Multiplayer",
   "description": "A package for easy to use couch multiplayer setup",
   "keywords": [

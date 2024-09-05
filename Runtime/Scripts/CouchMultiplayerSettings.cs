@@ -99,6 +99,6 @@ namespace SLIDDES.Multiplayer.Couch
         {
             return new SerializedObject(GetOrCreateSettings());
         }
-    }
 #endif
+    }
 }
