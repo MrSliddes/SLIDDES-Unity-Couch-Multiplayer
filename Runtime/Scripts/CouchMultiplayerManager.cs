@@ -119,6 +119,12 @@ namespace SLIDDES.Multiplayer.Couch
             Application.quitting -= () => { ApplicationIsQuitting = true; };
         }
 
+        private void OnDestroy()
+        {
+            instance = null;
+            ApplicationIsQuitting = true;
+        }
+
         // Start is called before the first frame update
         void Start()
         {
